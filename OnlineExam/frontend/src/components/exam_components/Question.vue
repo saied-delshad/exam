@@ -34,7 +34,6 @@ export default {
     submitData() {
       if (this.yourAnswer !== this.givenAnswer){
         this.$emit('submit-data', this.id, this.yourAnswer);
-        console.log("1111111111111111")
       }
       console.log(this.yourAnswer)
     }
