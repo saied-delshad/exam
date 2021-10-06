@@ -32,7 +32,9 @@ urlpatterns = [
 
     path('accounts/', include('django_registration.backends.one_step.urls')),
 
-    path('api/', include('users.api.urls')),
+    path('api/rest-auth/', include('rest_auth.urls')),
+
+    # path('api/', include('users.api.urls')),
 
     path('api/', include('exam_sessions.api.urls')),
 
@@ -40,7 +42,6 @@ urlpatterns = [
 
     path('api-auth/', include('rest_framework.urls')),
 
-    path('api/rest-auth/', include('rest_auth.urls')),
 
     path('api/rest-auth/registration/', 
         include('rest_auth.registration.urls')),

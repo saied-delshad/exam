@@ -9,7 +9,7 @@
         <label v-html=answer></label>
       </div>
       <div>
-        <base-button type="submit">Save answer</base-button>
+        <base-button type="submit" @click="updateAnswer">Save answer</base-button>
       </div>
     </form>
   </base-card>
@@ -25,17 +25,28 @@ export default {
   },
   props:['id', 'questionRefCode', 'questionNo', 'question', 'answers', 'givenAnswer' ],
 
+  emits: {
+    'update-answer': function(id, yourAnswer) {
+      if (yourAnswer >= 0) {
+        return true;
+      } else {
+        console.log("empty answer!!")
+        return false;
+      }
+    }
+  },
+
   watch: {
     id() {
       this.yourAnswer = this.givenAnswer
     }
   },
   methods: {
-    submitData() {
+    updateAnswer() {
+      
       if (this.yourAnswer !== this.givenAnswer){
-        this.$emit('submit-data', this.id, this.yourAnswer);
+        this.$emit('update-answer', this.id, this.yourAnswer);
       }
-      console.log(this.yourAnswer)
     }
 
   },

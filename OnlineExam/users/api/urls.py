@@ -1,7 +1,11 @@
-from django.urls import path
-from users.api.views import UserDisplayAPIView
+from django.urls import include, path
+from rest_framework.routers import DefaultRouter
+from users.api import views as uv
 
+router = DefaultRouter()
+
+router.register(r'users', uv.UserDisplayAPIViewset)
 
 urlpatterns = [
-    path('user/', UserDisplayAPIView.as_view(), name='current-user')
+    path("", include(router.urls))
 ]

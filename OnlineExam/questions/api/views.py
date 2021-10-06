@@ -17,10 +17,6 @@ class QuestionViewset(viewsets.ModelViewSet):
         serializer.save(created_by=self.request.user)
 
 
-    def get(self, request, *args, **kwargs):
-        return super(self).get(request, *args, **kwargs)
-
-
     def get_queryset(self):
         
         ref = self.kwargs['session_ref']

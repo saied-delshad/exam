@@ -9,7 +9,7 @@
                     :question="Questions[displayedQ]['question_content']"
                     :answers="answers()"
                     :givenAnswer="Questions[displayedQ].givenAnswer"
-                    @submit-data="updateAnswer"
+                    @update-answer="updateAnswer"
                 ></question>
             </div>
             <base-button @click="PrevQ">Previous Question</base-button>
@@ -31,8 +31,6 @@ export default {
             Questions: [],
             displayedQ: 0,
             SessionId: '',
-            givenAnswers: null,
-
         };
     },
     provide() {
@@ -61,7 +59,6 @@ export default {
         },
 
         NextQ() {
-            console.log(this.Questions[0].question_content);
             const l = this.Questions.length;
             if (this.displayedQ < l - 1 && this.displayedQ >= 0) {
                 this.displayedQ++;
@@ -72,7 +69,7 @@ export default {
             const identQ = this.Questions.find(
                 (question) => question.id === Qid
             );
-            this.givenAnswers[identQ['question_ref_code']] = newAnswer;
+            identQ['givenAnswer'] = newAnswer;
         },
 
         getQuestions() {
@@ -80,7 +77,6 @@ export default {
             apiService(endpoint).then((data) => {
                 const midvar = [];
                 midvar.push(...data);
-                console.log(data)
                 this.Questions = JSON.parse(JSON.stringify(midvar));
             });
         },
@@ -97,9 +93,6 @@ export default {
 
     mounted() {
         this.getQuestions();
-
-        var elem = document.documentElement;
-        elem.requestFullscreen();
     },
 };
 </script>

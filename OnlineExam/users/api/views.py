@@ -1,10 +1,18 @@
-from rest_framework.response import Response
-from rest_framework.views import APIView
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
 from users.api.serializers import UserDisplaySerializer
+from users.models import CustomUser
 
 
-class UserDisplayAPIView(APIView):
+class UserDisplayAPIViewset(viewsets.ModelViewSet):
 
-    def get(self, request):
-        serializer = UserDisplaySerializer(request.user)
-        return Response(serializer.data)
+    queryset = CustomUser.objects.all()
+    lookup_field = "id"
+    serializer_class = UserDisplaySerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+
+        if self.request.user.is_authenticated:
+            session_queryset = CustomUser.objects.get(user=self.request.user)
+        return session_queryse

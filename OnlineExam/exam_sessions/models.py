@@ -57,12 +57,12 @@ class SubjectExamSession(AbstractExamSession):
 class ExamResults(models.Model):
     student = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, related_name="exam_results")
-    course_exam_session = models.ForeignKey(CourseExamModel, on_delete=models.DO_NOTHING,
+    course_exam_session = models.ForeignKey(CourseExamSession, on_delete=models.DO_NOTHING,
                                             related_name="course_session", null=True)
     subject_exam_session = models.ForeignKey(SubjectExamSession, on_delete=models.DO_NOTHING,
                                              related_name="subject_sessions", null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    answers = JSONField("Answers")
+    answers = JSONField("Answers", null=True)
     score = models.IntegerField("Score", null=True)
     is_passed = models.BooleanField("Passed in exam", default=False)
     is_finished = models.BooleanField("Exam is finished", default=False)
@@ -72,3 +72,5 @@ class ExamResults(models.Model):
             return self.student.last_name + '-' + self.course_exam_session.session_ref_number
         elif self.subject_exam_session:
             return self.student.last_name + '-' + self.subject_exam_session.session_ref_number
+        else:
+            return self.student.last_name

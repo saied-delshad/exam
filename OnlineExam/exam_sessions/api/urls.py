@@ -7,5 +7,6 @@ router = DefaultRouter()
 router.register(r'sessions', sv.SubjectSessionViewset)
 
 urlpatterns = [
-    path("", include(router.urls))
+    path("", include(router.urls)),
+    path("createresult/", sv.ExamResultCreateView.as_view())
 ]
