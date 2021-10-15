@@ -52,11 +52,12 @@ export default {
             });
         },
         startSession(session) {
-            let endpoint = "api/createresult/";
+            let endpoint = "api/results/";
             let data = {
                     "answers": null,
                     "is_finished": false,
-                    "student": 2
+                    "student": null,
+                    "session_ref_number": session.session_ref_number
                 };
             postAxios(endpoint, data).then( response => {
                 console.log(response.data);

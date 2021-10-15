@@ -7,9 +7,11 @@ from django.db.models import JSONField
 
 
 class AbstractExamSession(models.Model):
-    session_name = models.CharField("Session name", max_length=20, default="New Session")
+    session_name = models.CharField(
+        "Session name", max_length=20, default="New Session")
 
-    session_descriptions = models.CharField("Session descriptions", max_length=150, default="Description")
+    session_descriptions = models.CharField(
+        "Session descriptions", max_length=150, default="Description")
 
     session_ref_number = models.CharField("Session reference code", max_length=20, blank=True,
                                           editable=False, unique=True)
@@ -24,14 +26,17 @@ class AbstractExamSession(models.Model):
 
     class Meta:
         abstract = True
-    
+
     @classmethod
     def get_user_sessions(cls, user=None):
+        """
+        This function gets active exam sessions of a user based on the user identified in keyword arguments.
+        """
         if user:
-            active_sessions = cls.objects.filter(is_active = True)
-            user_active_sessions =[]
+            active_sessions = cls.objects.filter(is_active=True)
+            user_active_sessions = []
             for active_session in active_sessions:
-                if user.groups.filter(name = active_session.participants.name).exists():
+                if user.groups.filter(name=active_session.participants.name).exists():
                     user_active_sessions.append(active_session)
             return user_active_sessions
         else:
@@ -47,30 +52,36 @@ class CourseExamSession(AbstractExamSession):
 
 
 class SubjectExamSession(AbstractExamSession):
-    subject = models.ForeignKey(
-        SubjectModel, on_delete=models.CASCADE, related_name="sub_exam_sessions")
+    subject_exam = models.ForeignKey(
+        SubjectExamModel, on_delete=models.CASCADE, related_name="sub_exam_sessions")
 
     def __str__(self):
-        return self.subject.subject_name + '-' + self.session_ref_number
+        return self.subject.exam_name + '-' + self.session_ref_number
 
 
 class ExamResults(models.Model):
     student = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, related_name="exam_results")
-    course_exam_session = models.ForeignKey(CourseExamSession, on_delete=models.DO_NOTHING,
-                                            related_name="course_session", null=True)
-    subject_exam_session = models.ForeignKey(SubjectExamSession, on_delete=models.DO_NOTHING,
-                                             related_name="subject_sessions", null=True)
+    session_ref_number = models.CharField("Session reference code", max_length=20, unique=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     answers = JSONField("Answers", null=True)
     score = models.IntegerField("Score", null=True)
     is_passed = models.BooleanField("Passed in exam", default=False)
     is_finished = models.BooleanField("Exam is finished", default=False)
 
+    def get_session(self):
+        """
+        This function gets reverse appropriate session based on session reference number.
+        """
+        if self.session_ref_number.startswith('sub_'):
+            return SubjectExamSession.objects.filter(session_ref_number=self.session_ref_number).first()
+        elif self.session_ref_number.startswith('course'):
+            return CourseExamSession.objects.filter(session_ref_number=self.session_ref_number).first()
+        else:
+            return None
+
     def __str__(self):
-        if self.course_exam_session:
-            return self.student.last_name + '-' + self.course_exam_session.session_ref_number
-        elif self.subject_exam_session:
-            return self.student.last_name + '-' + self.subject_exam_session.session_ref_number
+        if self.get_session():
+            return self.get_session().session_name + ' - ' + self.student.last_name
         else:
             return self.student.last_name

@@ -11,7 +11,7 @@ class QuestionViewset(viewsets.ModelViewSet):
     queryset = QuestionModel.objects.all()
     lookup_field = "question_ref_code"
     serializer_class = QuestionSerializer
-    permission_classes = [IsAuthenticated, IsSubscribedInSession]
+    permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
@@ -23,8 +23,12 @@ class QuestionViewset(viewsets.ModelViewSet):
         questios_queryset = subject_exam = None
         try:
             subject_exam = SubjectExamSession.objects.get(session_ref_number=ref)
+            print(ref)
         except:
             pass
         if subject_exam:
             questios_queryset = subject_exam.questions.all()
-        return questios_queryset
+            self.queryset = questios_queryset
+        print(self.queryset)
+        
+        return super(QuestionViewset, self).get_queryset()

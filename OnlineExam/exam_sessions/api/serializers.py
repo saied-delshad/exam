@@ -10,4 +10,4 @@ class SubjectSessionSerializer(serializers.ModelSerializer):
 class ExamResultSerializer(serializers.ModelSerializer):
     class Meta():
         model = ExamResults
-        exclude = ['course_exam_session', 'subject_exam_session', 'created_at', 'score', 'is_passed']
+        exclude = ['created_at', 'score', 'is_passed']

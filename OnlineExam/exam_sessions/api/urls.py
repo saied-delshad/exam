@@ -5,8 +5,9 @@ from exam_sessions.api import views as sv
 router = DefaultRouter()
 
 router.register(r'sessions', sv.SubjectSessionViewset)
+router.register(r'results', sv.ExamResultViewset)
 
 urlpatterns = [
     path("", include(router.urls)),
-    path("createresult/", sv.ExamResultCreateView.as_view())
+    path("updateresult/", sv.UpdateExamResult.as_view())
 ]

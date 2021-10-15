@@ -13,4 +13,4 @@ class SubjectExamSessionAdmin(admin.ModelAdmin):
 
 @admin.register(ExamResults)
 class ResultsExamAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['student', 'created_at', 'is_finished', 'score']
