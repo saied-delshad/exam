@@ -56,16 +56,16 @@ class SubjectExamSession(AbstractExamSession):
         SubjectExamModel, on_delete=models.CASCADE, related_name="sub_exam_sessions")
 
     def __str__(self):
-        return self.subject.exam_name + '-' + self.session_ref_number
+        return self.subject_exam.exam_name + '-' + self.session_ref_number
 
 
 class ExamResults(models.Model):
     student = models.ForeignKey(
         CustomUser, on_delete=models.CASCADE, related_name="exam_results")
-    session_ref_number = models.CharField("Session reference code", max_length=20, unique=True, blank=True)
+    session_ref_number = models.CharField("Session reference code", max_length=20, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     answers = JSONField("Answers", null=True)
-    score = models.IntegerField("Score", null=True)
+    score = models.IntegerField("Score", blank=True, null=True)
     is_passed = models.BooleanField("Passed in exam", default=False)
     is_finished = models.BooleanField("Exam is finished", default=False)
 
@@ -79,9 +79,15 @@ class ExamResults(models.Model):
             return CourseExamSession.objects.filter(session_ref_number=self.session_ref_number).first()
         else:
             return None
+    
+    class Meta:
+        unique_together = ('student', 'session_ref_number')
+        verbose_name_plural = "Exam Results"
+
 
     def __str__(self):
         if self.get_session():
             return self.get_session().session_name + ' - ' + self.student.last_name
         else:
             return self.student.last_name
+    

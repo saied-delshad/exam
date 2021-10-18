@@ -9,13 +9,17 @@
                         <span class="badge badge-light">{{ user["first_name"] }} {{ user['last_name'] }}</span>
                     </p>
                 </li>
-                <li class="nav-item">
-                    <a
-                        class="btn btn-sm btn-danger"
+                <li v-if="page == 'Home'" class="nav-item">
+                    <a class="btn btn-sm btn-danger"
                         href="/accounts/logout/"
                         tabindex="-1"
-                        >Logout</a
-                    >
+                        >Logout</a>
+                </li>
+                <li v-else-if="page == 'Exam'">
+                    <a class="btn btn-sm btn-danger"
+                        tabindex="-1"
+                        @click="$emit('click-quit')"
+                        >Quit the Exam</a>
                 </li>
             </ul>
         </div>
@@ -33,6 +37,8 @@ export default {
             user: {},
         };
     },
+
+    props: ['page'],
 
     methods: {
         getUserData() {

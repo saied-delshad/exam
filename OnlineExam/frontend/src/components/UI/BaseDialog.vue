@@ -25,7 +25,7 @@ export default {
             required: false,
         },
     },
-    emits: ['close'],
+    emits: ["close"],
 };
 </script>
 

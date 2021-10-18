@@ -1,12 +1,17 @@
 from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from core.utils import generate_random_string
+from questions.models import QuestionModel
 
-from exam_sessions.models import AbstractExamSession, CourseExamSession, SubjectExamSession
+from exam_sessions.models import AbstractExamSession, CourseExamSession, SubjectExamSession, ExamResults
 
 
 @receiver(pre_save, sender=CourseExamSession)
 def add_ref_to_session(sender, instance, *args, **kwargs):
+    """
+    This function creates a unique reference number for Course Exam Sessions.
+    The reference number starts with course_ses_ and continues with a code.
+    """
     if instance and not instance.session_ref_number:
         ref_code = generate_random_string()
         instance.session_ref_number = "course_ses_" + ref_code
@@ -14,6 +19,10 @@ def add_ref_to_session(sender, instance, *args, **kwargs):
 
 @receiver(pre_save, sender=SubjectExamSession)
 def add_ref_to_session(sender, instance, *args, **kwargs):
+    """
+    This function creates a unique reference number for Subject Exam Sessions.
+    The reference number starts with sub_ses_ and continues with a code.
+    """
     if instance and not instance.session_ref_number:
         ref_code = generate_random_string()
         instance.session_ref_number = "sub_ses_" + ref_code
@@ -45,6 +54,25 @@ def select_questions(sender, instance, created, **kwargs):
     """
     instance.questions.clear()
     if instance.pk:
-        noq = instance.subject.noq_total
+        noq = instance.subject_exam.noq_total
         questions = instance.subject_exam.subject.sub_questions.order_by('?')[:noq]
         instance.questions.add(*questions)
+
+
+@receiver(pre_save, sender=ExamResults)
+def has_exam_finished(sender, instance, *args, **kwargs):
+    if instance.is_finished and not instance.score:
+        session = instance.get_session()
+        questions = session.questions.all()
+        answers = instance.answers
+        correctly_answered_questions = []
+        for question in session.questions.all():
+            ref = question.question_ref_code
+            if answers.get(ref, None) != None:
+                if int(question.correct_answer)-1 == answers[ref]:
+                    correctly_answered_questions.append(ref)
+        score = 100*len(correctly_answered_questions)/questions.count()
+        instance.score = score
+        ## to be used for checking pass/fail
+
+

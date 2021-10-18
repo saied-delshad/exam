@@ -6,7 +6,6 @@ from exam_sessions.models import SubjectExamSession, CourseExamSession
 from questions.api.permissions import IsSubscribedInSession
 
 
-
 class QuestionViewset(viewsets.ModelViewSet):
     queryset = QuestionModel.objects.all()
     lookup_field = "question_ref_code"
@@ -16,19 +15,16 @@ class QuestionViewset(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
 
-
     def get_queryset(self):
-        
+
         ref = self.kwargs['session_ref']
         questios_queryset = subject_exam = None
         try:
-            subject_exam = SubjectExamSession.objects.get(session_ref_number=ref)
-            print(ref)
+            subject_exam = SubjectExamSession.objects.get(
+                session_ref_number=ref)
         except:
             pass
         if subject_exam:
             questios_queryset = subject_exam.questions.all()
             self.queryset = questios_queryset
-        print(self.queryset)
-        
         return super(QuestionViewset, self).get_queryset()

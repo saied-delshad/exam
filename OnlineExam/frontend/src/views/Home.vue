@@ -1,6 +1,6 @@
 <template>
     <div class="home">
-        <navbar-component />
+        <navbar-component page='Home'/>
         <div class="container">
             <div v-if="ActiveSessions.length === 0">
                 <h2 class="text text-primary">You have no active exams!</h2>

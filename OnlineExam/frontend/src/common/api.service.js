@@ -17,6 +17,7 @@ function apiService(endpoint, method, data) {
     };
     return fetch(endpoint, config).then(getJSON).catch(error => console.log(error)) 
 }
+
 axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
 axios.defaults.xsrfCookieName = "csrftoken";
 function postAxios(endpoint, data) {
@@ -29,4 +30,15 @@ function postAxios(endpoint, data) {
 
 }
 
-export {apiService, postAxios};
+function patchAxios(endpoint, data) {
+    return axios.patch(endpoint, data, {
+        Headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFTOKEN': CSRF_TOKEN
+        }
+    })
+}
+
+
+
+export {apiService, postAxios, patchAxios};

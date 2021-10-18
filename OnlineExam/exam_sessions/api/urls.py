@@ -9,5 +9,4 @@ router.register(r'results', sv.ExamResultViewset)
 
 urlpatterns = [
     path("", include(router.urls)),
-    path("updateresult/", sv.UpdateExamResult.as_view())
 ]

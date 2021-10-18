@@ -1,15 +1,17 @@
 <template>
   <base-card>
     <form @submit.prevent="submitData">
-      <div class="form-control">
-        <b>{{ questionNo + 1}}.</b><p v-html=question></p>
-      </div>
-      <div v-for="(answer, ind) in answers" :key="ind" class="form-control">
-        <input :id="id" :name="id" :value="ind" type="radio" v-model="yourAnswer" />
-        <label v-html=answer></label>
-      </div>
-      <div>
-        <base-button type="submit" @click="updateAnswer">Save answer</base-button>
+      <div class="form-group">
+        <div class="form-control">
+          <span v-html=rectifiedQ(questionNo,question)></span>
+        </div>
+        <div v-for="(answer, ind) in answers" :key="ind" class="form-check">
+          <input :id="id" :name="id" :value="ind" type="radio" class="form-check-input" v-model="yourAnswer" />
+          <label v-html=answer class="form-check-label"></label>
+        </div>
+        <div>
+          <button class="btn btn-success" type="submit" @click="updateAnswer">Save answer</button>
+        </div>
       </div>
     </form>
   </base-card>
@@ -47,6 +49,13 @@ export default {
       if (this.yourAnswer !== this.givenAnswer){
         this.$emit('update-answer', this.id, this.yourAnswer);
       }
+    },
+
+    rectifiedQ(questionNo, question) {
+      const Num = questionNo + 1
+      const q = question.replace(/(<p[^>]+?>|<p>|<\/p>)/img, "");
+      return '#' + Num.toString() + '. ' + q
+
     }
 
   },
