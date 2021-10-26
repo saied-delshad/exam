@@ -17,9 +17,30 @@
                 <div class="container-fluid container-btn">
                     <button v-if="displayedQ>0" class="btn btn-info float-left butt" @click="PrevQ">Previous Question</button>
                     <button v-if="displayedQ+1<Object.keys(Questions).length" class="btn btn-info float-right butt" @click="NextQ">Next Question</button>
+                    <button v-if="displayedQ+1==Object.keys(Questions).length" class="btn btn-danger float-right butt" @click="finishExam">Finish</button>
                 </div>
             </div>
         </base-card>
+        <div class="d-flex justify-content-center">
+            <p>To navigate through the question click on:</p>
+            <button @click="SwitchNav('open')" class="btn btn-sm btn-outline-info">Overview</button>
+        </div>
+        <base-dialog v-if="NavigateQ" title="Exam Overview">
+            <template #default>
+                <h3>Question List</h3>
+                <p>Click on the box to go to the question</p>
+                <question-navigator :Questions="Questions" @go-to-question="goToQuestion"/>
+            </template>
+            <template #actions>
+                <button @click="SwitchNav('close')" class="btn btn-sm btn-primary">Close
+                </button>
+            </template>
+        </base-dialog>
+
+        <vue-countdown-timer>
+        </vue-countdown-timer>
+
+        
     </div>
     <base-dialog v-if="UserFinish" title="Quit the exam!">
         <template #default>
@@ -27,8 +48,10 @@
             <p> You will quit the exam and will not be able to continue </p>
         </template>
         <template #actions>
-            <base-button @click="BackToExam" class="btn btn-sm btn-primary">Back to Exam </base-button>
-            <base-button @click="Quit" class="btn btn-sm btn-danger">Quit the Exam</base-button>
+            <div class="btn-group">
+                <button @click="BackToExam" class="btn btn-sm btn-success">Back to Exam </button>
+                <button @click="Quit" class="btn btn-sm btn-danger">Quit the Exam</button>
+            </div>
         </template>
     </base-dialog>
 </template>
@@ -37,13 +60,13 @@
 import Question from "./Question.vue";
 import NavbarComponent from "../UI/Navbar.vue"
 import { apiService, patchAxios } from "../../common/api.service";
-import BaseDialog from '../UI/BaseDialog.vue';
+import QuestionNavigator from './QuestionNavigator.vue';
 
 export default {
     components: {
         Question,
+        QuestionNavigator,
         NavbarComponent,
-        BaseDialog,
     },
     data() {
         return {
@@ -51,7 +74,8 @@ export default {
             displayedQ: 0,
             SessionId: '',
             Answers: {},
-            UserFinish: false
+            UserFinish: false,
+            NavigateQ: false
         };
     },
     provide() {
@@ -100,13 +124,38 @@ export default {
                 });
         },
 
-        getQuestions() {
+        goToQuestion(qnum) {
+            this.displayedQ = qnum - 1;
+            this.NavigateQ = false;
+
+        },
+
+        async getQuestions() {
             let endpoint = "api/" + this.SessionId + "/questions/";
             apiService(endpoint).then((data) => {
+                console.log(data)
                 const midvar = [];
                 midvar.push(...data);
                 this.Questions = JSON.parse(JSON.stringify(midvar));
+                this.getAnswers()
             });
+        },
+
+        getAnswers() {
+            let endpoint = 'api/results/' + this.SessionId +'/';
+            apiService(endpoint).then((data) => {
+                if (data['answers'] != null && Object.keys(this.Questions).length >0 ){
+                    this.Answers = data['answers'];
+                    console.log(data)
+                    for (var key of Object.keys(this.Answers)) {
+                        const q = this.Questions.find(
+                            (question) => question.question_ref_code === key
+                        )
+                        q['givenAnswer'] = this.Answers[key];
+
+                    }
+                }
+            })
         },
 
         clickQuit() {
@@ -126,19 +175,37 @@ export default {
                 });
         },
 
-        // removeResource(resId) {
-        //   const resIndex = this.storedResources.findIndex(res => res.id === resId);
-        //   this.storedResources.splice(resIndex, 1);
-        // },
+        finishExam() {
+            this.$router.push({
+                    name: "FinishPage",
+                    params: { SessionId: this.SessionId },
+                });
+        }, 
+        SwitchNav(action) {
+            if (action == "open") {
+                this.NavigateQ = true;
+            } else {
+                this.NavigateQ = false;
+            }
+
+        },
+
+        startCallBack: function(x) {
+            console.log(x);
+        },
+        endCallBack: function(x) {
+            console.log(x);
+        },
+
     },
 
     created() {
+        
         this.SessionId = this.$route.params.SessionId;
+        this.getQuestions();
+
     },
 
-    mounted() {
-        this.getQuestions();
-    },
 };
 </script>
 

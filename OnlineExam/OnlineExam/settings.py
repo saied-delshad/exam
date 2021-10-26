@@ -47,11 +47,20 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
 
+     'admin_reorder',
+
+    'import_export',
+
+    'easy_thumbnails',
+    'filer',
+    'mptt',
+
     'rest_auth',
     'rest_auth.registration',
     'crispy_forms',
 
     'ckeditor',
+    'ckeditor_uploader',
     'webpack_loader',
 
     'users',
@@ -59,11 +68,32 @@ INSTALLED_APPS = [
     'exam_sessions',
 ]
 
+ADMIN_REORDER = (
+    # Keep original label and models
+    'sites',
+
+    # Rename app
+    {'app': 'auth', 'label': 'Groups'},
+
+
+    # Reorder app models
+    {'app': 'users', 'label': 'Users', 'models': ('users.CustomUser',)},
+
+    {'app': 'questions', 'models': ('questions.CourseModel', 'questions.SubjectModel', 'questions.QuestionModel',
+                                    'questions.SubjectExamModel', 'questions.CourseExamModel')},
+
+    {'app': 'exam_sessions', 'models': ('exam_sessions.SubjectExamSession', 'exam_sessions.CourseExamSession',
+                                         'exam_sessions.ExamResults')},
+
+
+)
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
+    'admin_reorder.middleware.ModelAdminReorder',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -142,6 +172,16 @@ LOGOUT_REDIRECT_URL = "/"
 
 STATIC_URL = '/static/'
 
+STATICFILES_DIRS = [
+    # os.path.join(BASE_DIR , 'assets'),
+    os.path.join(BASE_DIR , 'frontend\dist')
+]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+# media files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
 # Custom User Model
 AUTH_USER_MODEL = 'users.CustomUser'
 
@@ -160,6 +200,11 @@ SITE_ID = 1
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_EMAIL_REQUIRED = (True)
 
+
+# django-import-export
+IMPORT_EXPORT_USE_TRANSACTIONS = True
+
+# django rest framework
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
@@ -177,3 +222,19 @@ WEBPACK_LOADER = {
         'STATS_FILE': os.path.join(BASE_DIR, 'frontend', 'webpack-stats.json'),
     }
 }
+
+# thumbnails
+THUMBNAIL_HIGH_RESOLUTION = True
+
+THUMBNAIL_PROCESSORS = (
+    'easy_thumbnails.processors.colorspace',
+    'easy_thumbnails.processors.autocrop',
+    #'easy_thumbnails.processors.scale_and_crop',
+    'filer.thumbnail_processors.scale_and_crop_with_subject_location',
+    'easy_thumbnails.processors.filters',
+)
+
+# ckeditor
+CKEDITOR_UPLOAD_PATH = 'uploads/'
+
+site_title="Alireza"

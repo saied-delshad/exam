@@ -4,7 +4,8 @@ from exam_sessions.api import views as sv
 
 router = DefaultRouter()
 
-router.register(r'sessions', sv.SubjectSessionViewset)
+router.register(r'sub-sessions', sv.SubjectSessionViewset)
+router.register(r'cou-sessions', sv.CourseSessionViewset)
 router.register(r'results', sv.ExamResultViewset)
 
 urlpatterns = [

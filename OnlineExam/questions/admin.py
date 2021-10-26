@@ -1,5 +1,9 @@
 from django.contrib import admin
-from questions.models import CourseModel, SubjectModel, QuestionModel, CourseExamModel, SubjectExamModel, PerSubjectModel
+from questions.models import CourseModel, SubjectModel, QuestionModel, CourseExamModel,\
+                             SubjectExamModel, PerSubjectModel
+from import_export.admin import ImportExportModelAdmin
+from django.forms.models import BaseInlineFormSet
+from django.core.exceptions import ValidationError
 
 @admin.register(CourseModel)
 class CourseModelAdmin(admin.ModelAdmin):
@@ -10,14 +14,44 @@ class SubjectModelAdmin(admin.ModelAdmin):
     list_display = ['subject_name', 'created_at', 'course']
 
 @admin.register(QuestionModel)
-class QuestionModelAdmin(admin.ModelAdmin):
-    list_display = ['question_ref_code', 'created_at', 'last_update', 'difficulty_level', 'subject' ]
+class QuestionModelAdmin(ImportExportModelAdmin):
+    list_display = ['question_ref_code', 'created_at','difficulty_level', 'subject' ]
+    list_filter = ['difficulty_level', 'subject']
+    search_fields = ['question_ref_code', 'subject__subject_name']
+
+    def save_model(self, request, obj, form, change):
+        instance = form.save(commit=False)
+        if not hasattr(instance, 'created_by'):
+            instance.created_by = request.user
+        return super(QuestionModelAdmin, self).save_model(request, obj, form, change)
+
+
+
+class SubjectInlineFormSet(BaseInlineFormSet):
+    def clean(self):
+        super(SubjectInlineFormSet, self).clean()
+        total = 0
+        for form in self.forms:
+            if form.cleaned_data and form.cleaned_data.get('noq_subject'):
+                total += form.cleaned_data['noq_subject']
+        if self.instance.noq_total != total:
+            difference = self.instance.noq_total - total
+            if difference > 0:
+                raise ValidationError('Total number of questions per subject is %s less\
+                   than total number of questions defined for the exam' %str(difference))
+            elif difference < 0:
+                raise ValidationError('Total number of questions per subject is %s more\
+                   than total number of questions defined for the exam' %str(difference))
+
+
+
 
 class AddSubjectQInline(admin.StackedInline):
     """
     This class adds fields to determine number of questions related to each subject in the course
     """
     model = PerSubjectModel
+    formset = SubjectInlineFormSet
     extra = 0
 
     def has_add_permission(self, request, obj=None):
@@ -25,6 +59,8 @@ class AddSubjectQInline(admin.StackedInline):
     
     def has_delete_permission(self, request, obj=None):
         return False
+    
+
 
 @admin.register(CourseExamModel)
 class CourseExamModelAdmin(admin.ModelAdmin):

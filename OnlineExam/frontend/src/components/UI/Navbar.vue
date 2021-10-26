@@ -9,7 +9,7 @@
                         <span class="badge badge-light">{{ user["first_name"] }} {{ user['last_name'] }}</span>
                     </p>
                 </li>
-                <li v-if="page == 'Home'" class="nav-item">
+                <li v-if="page == 'Home' || page == 'Finish'" class="nav-item">
                     <a class="btn btn-sm btn-danger"
                         href="/accounts/logout/"
                         tabindex="-1"
@@ -35,6 +35,7 @@ export default {
     data() {
         return {
             user: {},
+            time: null
         };
     },
 
@@ -43,7 +44,9 @@ export default {
     methods: {
         getUserData() {
             let endpoint = "api/rest-auth/user/";
+            console.log(endpoint);
             apiService(endpoint).then((data) => {
+                console.log(data);
                 this.user = JSON.parse(JSON.stringify(data));
             });
         },

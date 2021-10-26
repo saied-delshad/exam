@@ -2,13 +2,27 @@
     <div class="home">
         <navbar-component page='Home'/>
         <div class="container">
-            <div v-if="ActiveSessions.length === 0">
+            <div v-if="ActiveSubSessions.length === 0  && ActiveCouSessions.length === 0">
                 <h2 class="text text-primary">You have no active exams!</h2>
             </div>
             <div v-else>
                 <h2>Your current exam session(s)</h2>
                 <base-card
-                    v-for="(session, ind) in ActiveSessions"
+                    v-for="(session, ind) in ActiveSubSessions"
+                    :key="ind"
+                    class="container"
+                >
+                    Exam name (click to start):
+                    <button
+                        @click="startSession(session)"
+                        class="btn btn-outline-success"
+                    >
+                        {{ session.session_name }}
+                    </button>
+                    <p>Exam Description: {{ session.session_descriptions }}</p>
+                </base-card>
+                <base-card
+                    v-for="(session, ind) in ActiveCouSessions"
                     :key="ind"
                     class="container"
                 >
@@ -38,17 +52,25 @@ export default {
 
     data() {
         return {
-            ActiveSessions: [],
+            ActiveSubSessions: [],
+            ActiveCouSessions: [],
         };
     },
 
     methods: {
         getActiveSessions() {
-            let endpoint = "api/sessions/";
+            let endpoint = "api/sub-sessions/";
             apiService(endpoint).then((data) => {
                 const midvar = [];
                 midvar.push(...data);
-                this.ActiveSessions = JSON.parse(JSON.stringify(midvar));
+                this.ActiveSubSessions = JSON.parse(JSON.stringify(midvar));
+            });
+
+            let endpoint_co = "api/cou-sessions/";
+            apiService(endpoint_co).then((data) => {
+                const midvar = [];
+                midvar.push(...data);
+                this.ActiveCouSessions = JSON.parse(JSON.stringify(midvar));
             });
         },
         startSession(session) {

@@ -64,10 +64,11 @@ class ExamResults(models.Model):
         CustomUser, on_delete=models.CASCADE, related_name="exam_results")
     session_ref_number = models.CharField("Session reference code", max_length=20, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    answers = JSONField("Answers", null=True)
+    answers = JSONField("Answers", blank = True, null=True)
     score = models.IntegerField("Score", blank=True, null=True)
     is_passed = models.BooleanField("Passed in exam", default=False)
     is_finished = models.BooleanField("Exam is finished", default=False)
+    show_score = models.BooleanField("Show score at the end of the exam?", default=False)
 
     def get_session(self):
         """

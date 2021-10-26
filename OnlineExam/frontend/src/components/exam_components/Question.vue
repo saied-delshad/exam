@@ -1,9 +1,11 @@
 <template>
   <base-card>
+    <div v-if="givenAnswer != null" class="badge-success" >Answered</div>
+    <div v-else class="badge-secondary">Not Answered</div>
     <form @submit.prevent="submitData">
       <div class="form-group">
         <div class="form-control">
-          <span v-html=rectifiedQ(questionNo,question)></span>
+          <h4 v-html=rectifiedQ(questionNo,question)></h4>
         </div>
         <div v-for="(answer, ind) in answers" :key="ind" class="form-check">
           <input :id="id" :name="id" :value="ind" type="radio" class="form-check-input" v-model="yourAnswer" />

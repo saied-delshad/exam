@@ -1,9 +1,11 @@
 from django.db import models
 from django.core.validators import MaxValueValidator, MinValueValidator, FileExtensionValidator
 from django.conf import settings
+from ckeditor_uploader.fields import RichTextUploadingField
 from ckeditor.fields import RichTextField
 from django.db.models import JSONField
 from model_utils import FieldTracker
+from filer.fields.file import FilerFileField
 
 
 class CourseModel(models.Model):
@@ -26,7 +28,7 @@ class SubjectModel(models.Model):
     course = models.ForeignKey(CourseModel(), on_delete=models.CASCADE, related_name="subjects")
 
     def __str__(self):
-        return self.subject_name
+        return self.subject_name + ' - ' + self.course.course_name
 
     class Meta:
         verbose_name = "Subject"
@@ -40,17 +42,16 @@ class QuestionModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     last_update = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
-                                    related_name="questions", blank=True)
-    question_content = RichTextField(verbose_name="Question", blank=False)
+                                    related_name="questions", blank=True, null=True)
+    question_content = RichTextUploadingField(verbose_name="Question", blank=False)
     question_ref_code = models.CharField(max_length=10, unique=True, blank=True)
-    opt_1 = RichTextField(verbose_name="A", blank=False)
-    opt_2 = RichTextField(verbose_name="B", blank=False)
-    opt_3 = RichTextField(verbose_name="C", blank=False)
-    opt_4 = RichTextField(verbose_name="D", null=True,blank=True)
-    question_file = models.FileField("Question supplementary file", null=True,
-            upload_to=question_files, blank=True)
-    correct_answer = models.CharField("Correct answer", choices=(("1", "A"), ("2", "B"), ("3", "C"), ("4", "D")),
-                                        max_length=1)
+    opt_1 = RichTextUploadingField(verbose_name="A", blank=False)
+    opt_2 = RichTextUploadingField(verbose_name="B", blank=False)
+    opt_3 = RichTextUploadingField(verbose_name="C", blank=False)
+    opt_4 = RichTextUploadingField(verbose_name="D", null=True,blank=True)
+    question_file = FilerFileField(related_name="supplementary_file", on_delete=models.CASCADE,
+                                null=True, blank=True)
+    correct_answer = models.IntegerField("Correct answer", choices=((1, "A"), (2, "B"), (3, "C"), (4, "D")))
     difficulty_level = models.CharField("Difficulty Level", choices=(("easy", "Easy"), ("medium", "Medium"),
                                                             ("hard", "Hard"), ("very hard", "Very hard")), max_length=20)
     numb_of_appeared = models.IntegerField("Number of times the question appeared in exams", default=0)

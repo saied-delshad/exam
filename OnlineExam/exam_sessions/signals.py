@@ -68,11 +68,21 @@ def has_exam_finished(sender, instance, *args, **kwargs):
         correctly_answered_questions = []
         for question in session.questions.all():
             ref = question.question_ref_code
-            if answers.get(ref, None) != None:
-                if int(question.correct_answer)-1 == answers[ref]:
-                    correctly_answered_questions.append(ref)
+            if question.correct_answer-1 == answers[ref]:
+                correctly_answered_questions.append(ref)
         score = 100*len(correctly_answered_questions)/questions.count()
         instance.score = score
         ## to be used for checking pass/fail
+    
+    if not instance.pk and instance.session_ref_number:
+        if instance.session_ref_number.startswith('sub'):
+            exam = SubjectExamSession.objects.get(session_ref_number = instance.session_ref_number)
+        elif instance.session_ref_number.startswith('course'):
+            exam = CourseExamSession.objects.get(session_ref_number = instance.session_ref_number)
+        if exam.show_score:
+            instance.show_score = True
+
+
+
 
 

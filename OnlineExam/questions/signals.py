@@ -5,7 +5,7 @@ from core.utils import generate_random_string
 from questions.models import QuestionModel, CourseExamModel, PerSubjectModel
 
 @receiver(pre_save, sender=QuestionModel)
-def add_ref_to_question(sender, instance, *args, **kwargs):
+def add_ref_creator_to_question(sender, instance, *args, **kwargs):
     if instance and not instance.question_ref_code:
         ref_code = generate_random_string()
         instance.question_ref_code = ref_code

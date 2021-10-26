@@ -20,11 +20,17 @@ class QuestionViewset(viewsets.ModelViewSet):
         ref = self.kwargs['session_ref']
         questios_queryset = subject_exam = None
         try:
-            subject_exam = SubjectExamSession.objects.get(
-                session_ref_number=ref)
+            if ref.startswith('sub'):
+                subject_exam = SubjectExamSession.objects.get(session_ref_number=ref)
+                self.queryset = subject_exam.questions.all()
+            elif ref.startswith('course'):
+                course_exam = CourseExamSession.objects.get(session_ref_number=ref)
+                self.queryset = course_exam.questions.all()
+            else:
+                self.queryset = self.queryset.none()
         except:
-            pass
-        if subject_exam:
-            questios_queryset = subject_exam.questions.all()
-            self.queryset = questios_queryset
+            if not request.user.is_superuser:
+                self.queryset = self.queryset.none()
+                
+           
         return super(QuestionViewset, self).get_queryset()
