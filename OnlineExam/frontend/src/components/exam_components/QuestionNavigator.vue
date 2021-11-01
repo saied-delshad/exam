@@ -59,6 +59,9 @@ export default {
         
         classColor(r, c, qs) {
             const n = this.cellNumber(r, c, qs);
+            if (isNaN(n)) {
+                return 'n-answered'
+            }
             if (qs[n-1]['givenAnswer']) {
                 return 'answered'
             }
