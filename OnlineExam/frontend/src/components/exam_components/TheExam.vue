@@ -37,8 +37,6 @@
             </template>
         </base-dialog>
 
-        <vue-countdown-timer>
-        </vue-countdown-timer>
 
         
     </div>
