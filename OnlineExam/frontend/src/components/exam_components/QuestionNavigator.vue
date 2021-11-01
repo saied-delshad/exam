@@ -82,27 +82,36 @@ export default {
     min-height: 5em;
     max-width: 50%;
 }
+</style>
+
+<style scoped>
 
 table, tr, td {
   border: 1px solid black;
   border-collapse: collapse;
 }
-
+</style>
+<style scoped>
 table {
     overflow: hidden;
 }
-
+</style>
+<style scoped>
 tr {
     line-height: 10px;
 }
-
+</style>
+<style scoped>
 td {
     width: 5px;
     cursor: pointer;
 }
+</style>
+<style>
 .answered {
     background-color: greenyellow;
 }
+
 .n-answered {
     background-color: gray;
 }

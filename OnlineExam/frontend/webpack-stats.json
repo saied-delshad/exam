@@ -1,10 +1,10 @@
 {
   "status": "done",
   "assets": {
-    "css/app.46d86465.css": {
-      "name": "css/app.46d86465.css",
-      "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\css\\app.46d86465.css",
-      "publicPath": "http://localhost:8080/css/app.46d86465.css"
+    "css/app.1967e791.css": {
+      "name": "css/app.1967e791.css",
+      "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\css\\app.1967e791.css",
+      "publicPath": "http://localhost:8080/css/app.1967e791.css"
     },
     "bundle.js": {
       "name": "bundle.js",
@@ -24,9 +24,9 @@
   },
   "chunks": {
     "app": [
-      "css/app.46d86465.css",
+      "css/app.1967e791.css",
       "bundle.js",
-      "css/app.46d86465.css.map",
+      "css/app.1967e791.css.map",
       "bundle.js.map"
     ]
   },
