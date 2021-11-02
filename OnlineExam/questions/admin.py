@@ -17,7 +17,7 @@ class SubjectModelAdmin(admin.ModelAdmin):
 class QuestionModelAdmin(ImportExportModelAdmin):
     list_display = ['question_ref_code', 'created_at','difficulty_level', 'subject' ]
     list_filter = ['difficulty_level', 'subject']
-    search_fields = ['question_ref_code', 'subject__subject_name']
+    search_fields = ['question_ref_code', 'subject__subject_name', 'question_content']
 
     def save_model(self, request, obj, form, change):
         instance = form.save(commit=False)
