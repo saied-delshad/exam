@@ -57,11 +57,6 @@ class ExamResultViewset(viewsets.ModelViewSet):
             serializer_class = ExamResultWriteSerializer
         return serializer_class
 
-    def update(self, request, *args, **kwargs):
-        print("888888888888888")
-        print(kwargs)
-        return super(ExamResultViewset, self).update(request, *args, **kwargs)
-
     def perform_create(self, serializer):
         serializer.save(student=self.request.user, 
                         session_ref_number=self.request.data.get('session_ref_number'))
