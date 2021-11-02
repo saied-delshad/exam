@@ -114,7 +114,8 @@ export default {
             );
             identQ['givenAnswer'] = newAnswer;
             this.Answers[identQ.question_ref_code] = newAnswer;
-            let data = {'answers':this.Answers}
+            let data = {'answers':this.Answers};
+            console.log(data);
             let endpoint = "api/results/" + this.SessionId + '/';
             patchAxios(endpoint, data).then( response => {
                 console.log(response.data);}).catch(e => {
@@ -165,12 +166,15 @@ export default {
         },
 
         Quit() {
-            let data = {'is_finished': true};
-            let endpoint = "api/results/" + this.SessionId + "/";
-            patchAxios(endpoint, data).then( response => {
-                console.log(response.data);}).catch(e => {
-                    console.log(e);
-                });
+            // let data = {'is_finished': true};
+            // let endpoint = "api/results/" + this.SessionId + "/";
+            this.finishExam();
+            // patchAxios(endpoint, data).then( response => {
+            //     console.log(response.data);
+                
+            //     }).catch(e => {
+            //         console.log(e);
+            //     });
         },
 
         finishExam() {

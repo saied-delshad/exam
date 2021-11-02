@@ -21,6 +21,8 @@ class SubjectSessionViewset(viewsets.ModelViewSet):
                self.queryset =  self.queryset.exclude(session_ref_number = item.session_ref_number)
         return super(SubjectSessionViewset, self).get_queryset()
 
+    
+
 
 class CourseSessionViewset(viewsets.ModelViewSet):
     queryset = CourseExamSession.objects.all()
@@ -54,6 +56,11 @@ class ExamResultViewset(viewsets.ModelViewSet):
         else:
             serializer_class = ExamResultWriteSerializer
         return serializer_class
+
+    def update(self, request, *args, **kwargs):
+        print("888888888888888")
+        print(kwargs)
+        return super(ExamResultViewset, self).update(request, *args, **kwargs)
 
     def perform_create(self, serializer):
         serializer.save(student=self.request.user, 

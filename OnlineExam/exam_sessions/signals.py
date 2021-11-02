@@ -65,13 +65,15 @@ def has_exam_finished(sender, instance, *args, **kwargs):
         session = instance.get_session()
         questions = session.questions.all()
         answers = instance.answers
+        print(type(answers))
         correctly_answered_questions = []
         for question in session.questions.all():
             ref = question.question_ref_code
-            if question.correct_answer-1 == answers[ref]:
+            if question.correct_answer-1 == answers.get(ref, None):
                 correctly_answered_questions.append(ref)
         score = 100*len(correctly_answered_questions)/questions.count()
         instance.score = score
+        print(score)
         ## to be used for checking pass/fail
     
     if not instance.pk and instance.session_ref_number:
