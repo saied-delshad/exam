@@ -18,10 +18,11 @@ class QuestionModelAdmin(ImportExportModelAdmin):
     list_display = ['question_ref_code', 'created_at','difficulty_level', 'subject' ]
     list_filter = ['difficulty_level', 'subject']
     search_fields = ['question_ref_code', 'subject__subject_name', 'question_content']
+    readonly_fields = ['numb_of_appeared', 'correctly_answered_times', 'created_by']
 
     def save_model(self, request, obj, form, change):
         instance = form.save(commit=False)
-        if not hasattr(instance, 'created_by'):
+        if not getattr(instance, 'created_by', None):
             instance.created_by = request.user
         return super(QuestionModelAdmin, self).save_model(request, obj, form, change)
 

@@ -62,11 +62,11 @@ export default {
             if (isNaN(n)) {
                 return 'n-answered'
             }
-            if (qs[n-1]['givenAnswer']) {
-                return 'answered'
+            if (isNaN(qs[n-1]['givenAnswer'])) {
+                return 'n-answered'
             }
             else {
-                return 'n-answered'
+                return 'answered'
             }
         },
         goToQuestion(num) {

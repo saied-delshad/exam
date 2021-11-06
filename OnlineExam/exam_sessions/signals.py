@@ -67,9 +67,12 @@ def has_exam_finished(sender, instance, *args, **kwargs):
         answers = instance.answers
         correctly_answered_questions = []
         for question in session.questions.all():
+            question.numb_of_appeared = question.numb_of_appeared + 1 
             ref = question.question_ref_code
             if question.correct_answer-1 == answers.get(ref, None):
                 correctly_answered_questions.append(ref)
+                question.correctly_answered_times = question.correctly_answered_times + 1
+            question.save()
         score = 100*len(correctly_answered_questions)/questions.count()
         instance.score = score
         ## to be used for checking pass/fail
