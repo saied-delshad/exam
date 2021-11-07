@@ -60,10 +60,10 @@ def select_questions(sender, instance, created, **kwargs):
 
 @receiver(pre_save, sender=ExamResults)
 def set_timer(sender, instance, *args, **kwargs):
-    if not instance.exam_time:
-        instance.exam_time = instance.get_exam_time()
+    if not instance.exam_duration:
+        instance.exam_duration = instance.get_exam_time()
 
-        
+
 @receiver(pre_save, sender=ExamResults)
 def has_exam_finished(sender, instance, *args, **kwargs):
     if instance.is_finished and not instance.score:
@@ -71,15 +71,28 @@ def has_exam_finished(sender, instance, *args, **kwargs):
         questions = session.questions.all()
         answers = instance.answers
         correctly_answered_questions = []
+        not_answered = {}
+        instance.num_not_answered = 0
+        wrong_answered = {}
+        instance.num_wrong = 0
         for question in session.questions.all():
             question.numb_of_appeared = question.numb_of_appeared + 1 
             ref = question.question_ref_code
-            if question.correct_answer-1 == answers.get(ref, None):
+            answer = answers.get(ref, None)
+            if answer == None:
+                not_answered.update({ref:''})
+                instance.num_not_answered += 1
+            elif question.correct_answer-1 == answer:
                 correctly_answered_questions.append(ref)
-                question.correctly_answered_times = question.correctly_answered_times + 1
+                question.correctly_answered_times += 1
+            else:
+                instance.num_wrong +=1
+                wrong_answered.update({ref:answer})
             question.save()
         score = 100*len(correctly_answered_questions)/questions.count()
         instance.score = score
+        instance.not_answered = not_answered
+        instance.wrong_answers = wrong_answered
         ## to be used for checking pass/fail
     
     if not instance.pk and instance.session_ref_number:

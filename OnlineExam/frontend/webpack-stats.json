@@ -415,12 +415,22 @@
       "name": "d1047e2ba02d8fe6be74.hot-update.json",
       "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\d1047e2ba02d8fe6be74.hot-update.json",
       "publicPath": "http://localhost:8080/d1047e2ba02d8fe6be74.hot-update.json"
+    },
+    "app.8ef664d3601e21435343.hot-update.js": {
+      "name": "app.8ef664d3601e21435343.hot-update.js",
+      "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\app.8ef664d3601e21435343.hot-update.js",
+      "publicPath": "http://localhost:8080/app.8ef664d3601e21435343.hot-update.js"
+    },
+    "8ef664d3601e21435343.hot-update.json": {
+      "name": "8ef664d3601e21435343.hot-update.json",
+      "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\8ef664d3601e21435343.hot-update.json",
+      "publicPath": "http://localhost:8080/8ef664d3601e21435343.hot-update.json"
     }
   },
   "chunks": {
     "app": [
       "bundle.js",
-      "app.d1047e2ba02d8fe6be74.hot-update.js"
+      "app.8ef664d3601e21435343.hot-update.js"
     ]
   },
   "publicPath": "http://localhost:8080/",

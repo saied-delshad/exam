@@ -142,8 +142,8 @@ export default {
         getAnswers() {
             let endpoint = 'api/results/' + this.SessionId +'/';
             apiService(endpoint).then((data) => {
-                if (data['exam_time']) {
-                    this.examDur = data['exam_time'];
+                if (data['exam_duration']) {
+                    this.examDur = data['exam_duration'];
                 }
                 if (data['answers'] != null && Object.keys(this.Questions).length >0 ){
                     this.Answers = data['answers'];
