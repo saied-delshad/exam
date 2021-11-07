@@ -58,7 +58,12 @@ def select_questions(sender, instance, created, **kwargs):
         questions = instance.subject_exam.subject.sub_questions.order_by('?')[:noq]
         instance.questions.add(*questions)
 
+@receiver(pre_save, sender=ExamResults)
+def set_timer(sender, instance, *args, **kwargs):
+    if not instance.exam_time:
+        instance.exam_time = instance.get_exam_time()
 
+        
 @receiver(pre_save, sender=ExamResults)
 def has_exam_finished(sender, instance, *args, **kwargs):
     if instance.is_finished and not instance.score:

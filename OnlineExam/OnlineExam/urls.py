@@ -59,3 +59,5 @@ urlpatterns = [
 # if settings.DEBUG:
 urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + urlpatterns
 urlpatterns = static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + urlpatterns
+
+admin.site.site_header = 'Online Examination System'

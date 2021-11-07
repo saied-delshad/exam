@@ -4,6 +4,12 @@
             <span class="navbar-brand">Online Exam System</span>
 
             <ul class="navbar-nav ml-auto">
+                <li v-if="page == 'Exam'" >
+                    <div v-if="duration > 0">
+                        <exam-timer :exam_dur="duration" />
+                    </div>
+                </li>
+
                 <li class="nav-item active">
                     <p>
                         <span class="badge badge-light">{{ user["first_name"] }} {{ user['last_name'] }}</span>
@@ -28,8 +34,10 @@
 
 <script>
 import { apiService } from "../../common/api.service";
+import ExamTimer from '../exam_components/ExamTimer.vue';
 
 export default {
+    components: { ExamTimer },
     name: "NavbarComponent",
 
     data() {
@@ -39,7 +47,7 @@ export default {
         };
     },
 
-    props: ['page'],
+    props: ['page', 'duration'],
 
     methods: {
         getUserData() {

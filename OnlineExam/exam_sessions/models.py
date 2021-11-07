@@ -66,6 +66,7 @@ class ExamResults(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     answers = JSONField("Answers", blank = True, null=True)
     score = models.IntegerField("Score", blank=True, null=True)
+    exam_time = models.IntegerField("Exam duration", blank=True, default=0)
     is_passed = models.BooleanField("Passed in exam", default=False)
     is_finished = models.BooleanField("Exam is finished", default=False)
     show_score = models.BooleanField("Show score at the end of the exam?", default=False)
@@ -80,6 +81,13 @@ class ExamResults(models.Model):
             return CourseExamSession.objects.filter(session_ref_number=self.session_ref_number).first()
         else:
             return None
+    
+    def get_exam_time(self):
+        session = self.get_session()
+        if hasattr(session, 'subject_exam'):
+            return session.subject_exam.exam_duration
+        elif hasattr(session, 'course_exam'):
+            return session.subject_exam.exam_duration
     
     class Meta:
         unique_together = ('student', 'session_ref_number')

@@ -1,6 +1,6 @@
 <template>
     <div class="exam">
-        <navbar-component page='Exam' @click-quit="clickQuit"/>
+        <navbar-component page='Exam' :duration="examDur" @click-quit="clickQuit" />
         <base-card>
             <div>
                 <div v-if="Questions[displayedQ] !== undefined">
@@ -36,8 +36,6 @@
                 </button>
             </template>
         </base-dialog>
-
-
         
     </div>
     <base-dialog v-if="UserFinish" title="Quit the exam!">
@@ -73,7 +71,8 @@ export default {
             SessionId: '',
             Answers: {},
             UserFinish: false,
-            NavigateQ: false
+            NavigateQ: false,
+            examDur: 0
         };
     },
     provide() {
@@ -143,6 +142,9 @@ export default {
         getAnswers() {
             let endpoint = 'api/results/' + this.SessionId +'/';
             apiService(endpoint).then((data) => {
+                if (data['exam_time']) {
+                    this.examDur = data['exam_time'];
+                }
                 if (data['answers'] != null && Object.keys(this.Questions).length >0 ){
                     this.Answers = data['answers'];
                     console.log(data)
