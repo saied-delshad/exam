@@ -1,2 +1,3 @@
 db.sqlite3
 OnlineExam\settings.py
+core/views.py

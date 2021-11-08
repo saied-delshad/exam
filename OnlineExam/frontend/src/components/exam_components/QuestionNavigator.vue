@@ -1,7 +1,7 @@
 <template>
 <div class="d-flex justify-content-center">
     <div class="q-nav row align-items-center">
-        <table class="table table-bordered">
+        <table class="table table-bordered w-auto">
             <tr v-for="row in tableHeight(Questions)" :key="row">
                 <td v-for="col in tableLength(Questions)" :key="col"
                 @click="goToQuestion(cellNumber(row, col, Questions))" :class="classColor(row, col, Questions)">
@@ -80,7 +80,7 @@ export default {
 <style scoped>
 .q-nav {
     min-height: 5em;
-    max-width: 50%;
+    max-width: 2em;
 }
 </style>
 
@@ -89,6 +89,7 @@ export default {
 table, tr, td {
   border: 1px solid black;
   border-collapse: collapse;
+  padding: 0.6rem;
 }
 </style>
 <style scoped>
@@ -98,12 +99,12 @@ table {
 </style>
 <style scoped>
 tr {
-    line-height: 10px;
+    line-height: 2px;
 }
 </style>
 <style scoped>
 td {
-    width: 5px;
+    width: 2px;
     cursor: pointer;
 }
 </style>

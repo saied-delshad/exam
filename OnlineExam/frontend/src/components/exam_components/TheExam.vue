@@ -1,7 +1,8 @@
 <template>
     <div class="exam">
         <navbar-component page='Exam' :duration="examDur" @click-quit="clickQuit" />
-        <base-card>
+        <div class="row">
+        <base-card class="col-xs-6">
             <div>
                 <div v-if="Questions[displayedQ] !== undefined">
                     <question
@@ -15,41 +16,42 @@
                     ></question>
                 </div>
                 <div class="container-fluid container-btn">
-                    <button v-if="displayedQ>0" class="btn btn-info float-left butt" @click="PrevQ">Previous Question</button>
-                    <button v-if="displayedQ+1<Object.keys(Questions).length" class="btn btn-info float-right butt" @click="NextQ">Next Question</button>
-                    <button v-if="displayedQ+1==Object.keys(Questions).length" class="btn btn-danger float-right butt" @click="finishExam">Finish</button>
+                    <button v-if="displayedQ>0" class="btn btn-info float-left butt" @click="PrevQ">Previous</button>
+                    <button v-if="displayedQ+1<Object.keys(Questions).length"
+                     class="btn btn-success float-right butt" @click="NextQ">Save and Next</button>
+                    <button v-if="displayedQ+1<Object.keys(Questions).length"
+                     class="btn btn-info float-right butt" @click="NextQ">Next</button>
+                    <button v-if="displayedQ+1==Object.keys(Questions).length"
+                     class="btn btn-danger float-right butt" @click="finishExam">Finish</button>
                 </div>
             </div>
         </base-card>
-        <div class="d-flex justify-content-center">
+        <!-- <div class="d-flex justify-content-center">
             <p>To navigate through the question click on:</p>
             <button @click="SwitchNav('open')" class="btn btn-sm btn-outline-info">Overview</button>
+        </div> -->
+        <div class="col-xs-6 t-container">
+                <!-- <h3>Question List</h3>
+                <p>Click on the box to go to the question</p> -->
+            <question-navigator :Questions="Questions" @go-to-question="goToQuestion"/>
+                <!-- <button @click="SwitchNav('close')" class="btn btn-sm btn-primary">Close
+                </button> -->
+        
         </div>
-        <base-dialog v-if="NavigateQ" title="Exam Overview">
+        </div>
+        <base-dialog v-if="UserFinish" title="Quit the exam!">
             <template #default>
-                <h3>Question List</h3>
-                <p>Click on the box to go to the question</p>
-                <question-navigator :Questions="Questions" @go-to-question="goToQuestion"/>
+                <p> Are you sure? </p>
+                <p> You will quit the exam and will not be able to continue </p>
             </template>
             <template #actions>
-                <button @click="SwitchNav('close')" class="btn btn-sm btn-primary">Close
-                </button>
+                <div class="btn-group">
+                    <button @click="BackToExam" class="btn btn-sm btn-success">Back to Exam </button>
+                    <button @click="finishExam" class="btn btn-sm btn-danger">Quit the Exam</button>
+                </div>
             </template>
         </base-dialog>
-        
     </div>
-    <base-dialog v-if="UserFinish" title="Quit the exam!">
-        <template #default>
-            <p> Are you sure? </p>
-            <p> You will quit the exam and will not be able to continue </p>
-        </template>
-        <template #actions>
-            <div class="btn-group">
-                <button @click="BackToExam" class="btn btn-sm btn-success">Back to Exam </button>
-                <button @click="Quit" class="btn btn-sm btn-danger">Quit the Exam</button>
-            </div>
-        </template>
-    </base-dialog>
 </template>
 
 <script>
@@ -168,15 +170,7 @@ export default {
         },
 
         Quit() {
-            // let data = {'is_finished': true};
-            // let endpoint = "api/results/" + this.SessionId + "/";
             this.finishExam();
-            // patchAxios(endpoint, data).then( response => {
-            //     console.log(response.data);
-                
-            //     }).catch(e => {
-            //         console.log(e);
-            //     });
         },
 
         finishExam() {
@@ -220,5 +214,9 @@ export default {
 
 .butt {
     margin-top: 10px;
+}
+
+.t-container {
+    margin-top:20%;
 }
 </style>
