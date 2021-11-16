@@ -11,8 +11,12 @@
           <input :id="id" :name="id" :value="ind" type="radio" class="form-check-input" v-model="yourAnswer" />
           <label v-html=answer class="form-check-label"></label>
         </div>
-        <div>
-          <button class="btn btn-success" type="submit" @click="updateAnswer">Save answer</button>
+        <div class="container-fluid container-btn">
+          <button class="btn btn-success" type="submit" @click="updateAnswer('')">
+            Save answer <span class="fa fa-check-circle"></span></button>
+          <button class="btn btn-success float-right butt" @click="updateAnswer('next')">Save and Next
+            <span class="fa fa-share-square"></span>
+          </button>
         </div>
       </div>
     </form>
@@ -46,10 +50,15 @@ export default {
     }
   },
   methods: {
-    updateAnswer() {
+    updateAnswer(arg) {
       
       if (this.yourAnswer !== this.givenAnswer){
-        this.$emit('update-answer', this.id, this.yourAnswer);
+        if (arg=='next') {
+          this.$emit('update-answer', this.id, this.yourAnswer, arg);
+        }
+        else{
+          this.$emit('update-answer', this.id, this.yourAnswer);
+        }
       }
     },
 

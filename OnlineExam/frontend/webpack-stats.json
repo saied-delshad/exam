@@ -11,23 +11,117 @@
       "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\bundle.js",
       "publicPath": "http://localhost:8080/bundle.js"
     },
-    "bundle.js.map": {
-      "name": "bundle.js.map",
-      "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\bundle.js.map",
-      "publicPath": "http://localhost:8080/bundle.js.map"
-    },
     "index.html": {
       "name": "index.html",
       "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\index.html",
       "publicPath": "http://localhost:8080/index.html"
+    },
+    "app.4f2e3123743bf9968646.hot-update.js": {
+      "name": "app.4f2e3123743bf9968646.hot-update.js",
+      "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\app.4f2e3123743bf9968646.hot-update.js",
+      "publicPath": "http://localhost:8080/app.4f2e3123743bf9968646.hot-update.js"
+    },
+    "4f2e3123743bf9968646.hot-update.json": {
+      "name": "4f2e3123743bf9968646.hot-update.json",
+      "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\4f2e3123743bf9968646.hot-update.json",
+      "publicPath": "http://localhost:8080/4f2e3123743bf9968646.hot-update.json"
+    },
+    "app.5eece3e938a34df680b5.hot-update.js": {
+      "name": "app.5eece3e938a34df680b5.hot-update.js",
+      "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\app.5eece3e938a34df680b5.hot-update.js",
+      "publicPath": "http://localhost:8080/app.5eece3e938a34df680b5.hot-update.js"
+    },
+    "5eece3e938a34df680b5.hot-update.json": {
+      "name": "5eece3e938a34df680b5.hot-update.json",
+      "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\5eece3e938a34df680b5.hot-update.json",
+      "publicPath": "http://localhost:8080/5eece3e938a34df680b5.hot-update.json"
+    },
+    "app.eb609141027437ea6764.hot-update.js": {
+      "name": "app.eb609141027437ea6764.hot-update.js",
+      "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\app.eb609141027437ea6764.hot-update.js",
+      "publicPath": "http://localhost:8080/app.eb609141027437ea6764.hot-update.js"
+    },
+    "eb609141027437ea6764.hot-update.json": {
+      "name": "eb609141027437ea6764.hot-update.json",
+      "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\eb609141027437ea6764.hot-update.json",
+      "publicPath": "http://localhost:8080/eb609141027437ea6764.hot-update.json"
+    },
+    "app.da5f542af3e4922a5e2f.hot-update.js": {
+      "name": "app.da5f542af3e4922a5e2f.hot-update.js",
+      "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\app.da5f542af3e4922a5e2f.hot-update.js",
+      "publicPath": "http://localhost:8080/app.da5f542af3e4922a5e2f.hot-update.js"
+    },
+    "da5f542af3e4922a5e2f.hot-update.json": {
+      "name": "da5f542af3e4922a5e2f.hot-update.json",
+      "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\da5f542af3e4922a5e2f.hot-update.json",
+      "publicPath": "http://localhost:8080/da5f542af3e4922a5e2f.hot-update.json"
+    },
+    "app.5bf36c7b258dcd2c426e.hot-update.js": {
+      "name": "app.5bf36c7b258dcd2c426e.hot-update.js",
+      "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\app.5bf36c7b258dcd2c426e.hot-update.js",
+      "publicPath": "http://localhost:8080/app.5bf36c7b258dcd2c426e.hot-update.js"
+    },
+    "5bf36c7b258dcd2c426e.hot-update.json": {
+      "name": "5bf36c7b258dcd2c426e.hot-update.json",
+      "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\5bf36c7b258dcd2c426e.hot-update.json",
+      "publicPath": "http://localhost:8080/5bf36c7b258dcd2c426e.hot-update.json"
+    },
+    "app.f15929a08659e493c6ee.hot-update.js": {
+      "name": "app.f15929a08659e493c6ee.hot-update.js",
+      "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\app.f15929a08659e493c6ee.hot-update.js",
+      "publicPath": "http://localhost:8080/app.f15929a08659e493c6ee.hot-update.js"
+    },
+    "f15929a08659e493c6ee.hot-update.json": {
+      "name": "f15929a08659e493c6ee.hot-update.json",
+      "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\f15929a08659e493c6ee.hot-update.json",
+      "publicPath": "http://localhost:8080/f15929a08659e493c6ee.hot-update.json"
+    },
+    "app.e6372560295edda8386f.hot-update.js": {
+      "name": "app.e6372560295edda8386f.hot-update.js",
+      "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\app.e6372560295edda8386f.hot-update.js",
+      "publicPath": "http://localhost:8080/app.e6372560295edda8386f.hot-update.js"
+    },
+    "e6372560295edda8386f.hot-update.json": {
+      "name": "e6372560295edda8386f.hot-update.json",
+      "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\e6372560295edda8386f.hot-update.json",
+      "publicPath": "http://localhost:8080/e6372560295edda8386f.hot-update.json"
+    },
+    "app.5cdec518b6fd8787e655.hot-update.js": {
+      "name": "app.5cdec518b6fd8787e655.hot-update.js",
+      "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\app.5cdec518b6fd8787e655.hot-update.js",
+      "publicPath": "http://localhost:8080/app.5cdec518b6fd8787e655.hot-update.js"
+    },
+    "5cdec518b6fd8787e655.hot-update.json": {
+      "name": "5cdec518b6fd8787e655.hot-update.json",
+      "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\5cdec518b6fd8787e655.hot-update.json",
+      "publicPath": "http://localhost:8080/5cdec518b6fd8787e655.hot-update.json"
+    },
+    "app.81147cc9c59e136d6c2a.hot-update.js": {
+      "name": "app.81147cc9c59e136d6c2a.hot-update.js",
+      "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\app.81147cc9c59e136d6c2a.hot-update.js",
+      "publicPath": "http://localhost:8080/app.81147cc9c59e136d6c2a.hot-update.js"
+    },
+    "81147cc9c59e136d6c2a.hot-update.json": {
+      "name": "81147cc9c59e136d6c2a.hot-update.json",
+      "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\81147cc9c59e136d6c2a.hot-update.json",
+      "publicPath": "http://localhost:8080/81147cc9c59e136d6c2a.hot-update.json"
+    },
+    "app.36a5256b6cbb4d56615c.hot-update.js": {
+      "name": "app.36a5256b6cbb4d56615c.hot-update.js",
+      "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\app.36a5256b6cbb4d56615c.hot-update.js",
+      "publicPath": "http://localhost:8080/app.36a5256b6cbb4d56615c.hot-update.js"
+    },
+    "36a5256b6cbb4d56615c.hot-update.json": {
+      "name": "36a5256b6cbb4d56615c.hot-update.json",
+      "path": "C:\\Users\\Alireza\\Desktop\\OnlineEx\\OnlineExam\\frontend\\dist\\36a5256b6cbb4d56615c.hot-update.json",
+      "publicPath": "http://localhost:8080/36a5256b6cbb4d56615c.hot-update.json"
     }
   },
   "chunks": {
     "app": [
       "bundle.css",
       "bundle.js",
-      "bundle.css.map",
-      "bundle.js.map"
+      "app.36a5256b6cbb4d56615c.hot-update.js"
     ]
   },
   "publicPath": "http://localhost:8080/"

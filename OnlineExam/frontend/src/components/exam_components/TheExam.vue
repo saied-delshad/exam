@@ -16,11 +16,13 @@
                     ></question>
                 </div>
                 <div class="container-fluid container-btn">
-                    <button v-if="displayedQ>0" class="btn btn-info float-left butt" @click="PrevQ">Previous</button>
+                    <button v-if="displayedQ>0" class="btn btn-info float-left butt" @click="PrevQ">
+                        <span class="fa fa-hand-point-left">
+                         </span> Previous</button>
                     <button v-if="displayedQ+1<Object.keys(Questions).length"
-                     class="btn btn-success float-right butt" @click="NextQ">Save and Next</button>
-                    <button v-if="displayedQ+1<Object.keys(Questions).length"
-                     class="btn btn-info float-right butt" @click="NextQ">Next</button>
+                     class="btn btn-info float-right butt" @click="NextQ">Next <span class="fa fa-hand-point-right">
+                         </span>
+                     </button>
                     <button v-if="displayedQ+1==Object.keys(Questions).length"
                      class="btn btn-danger float-right butt" @click="finishExam">Finish</button>
                 </div>
@@ -109,7 +111,7 @@ export default {
             }
         },
 
-        updateAnswer(Qid, newAnswer) {
+        updateAnswer(Qid, newAnswer, arg) {
             const identQ = this.Questions.find(
                 (question) => question.id === Qid
             );
@@ -122,6 +124,9 @@ export default {
                 console.log(response.data);}).catch(e => {
                     console.log(e);
                 });
+            if (arg=='next') {
+                this.NextQ();
+            }
         },
 
         goToQuestion(qnum) {

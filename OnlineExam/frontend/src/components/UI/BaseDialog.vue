@@ -1,5 +1,4 @@
 <template>
-    <div @click="$emit('close')"></div>
     <dialog open>
         <header>
             <slot name="header">
