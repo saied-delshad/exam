@@ -1,7 +1,7 @@
 <template>
-<div class="d-flex justify-content-center">
-    <div class="q-nav row align-items-center">
-        <table class="table table-bordered w-auto">
+<div class="d-flex justify-content-center ">
+    <div class="q-nav">
+        <table class="table table-bordered">
             <tr v-for="row in tableHeight(Questions)" :key="row">
                 <td v-for="col in tableLength(Questions)" :key="col"
                 @click="goToQuestion(cellNumber(row, col, Questions))" :class="classColor(row, col, Questions)">
@@ -86,10 +86,21 @@ export default {
 
 <style scoped>
 
+header {
+    background-color: #3a0061;
+    color: white;
+    width: 100%;
+    padding: 1rem;
+}
+
+section {
+    padding: 1rem;
+}
+
 table, tr, td {
   border: 1px solid black;
   border-collapse: collapse;
-  padding: 0.6rem;
+  padding: 0.5rem;
 }
 </style>
 <style scoped>

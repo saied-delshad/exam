@@ -2,7 +2,7 @@
     <div class="exam">
         <navbar-component page='Exam' :duration="examDur" @click-quit="clickQuit" />
         <div class="row">
-        <base-card class="col-xs-6">
+        <base-card class="col col-md-auto">
             <div>
                 <div v-if="Questions[displayedQ] !== undefined">
                     <question
@@ -32,7 +32,7 @@
             <p>To navigate through the question click on:</p>
             <button @click="SwitchNav('open')" class="btn btn-sm btn-outline-info">Overview</button>
         </div> -->
-        <div class="col-xs-6 t-container">
+        <div class="col col-md-auto t-container">
                 <!-- <h3>Question List</h3>
                 <p>Click on the box to go to the question</p> -->
             <question-navigator :Questions="Questions" @go-to-question="goToQuestion"/>
