@@ -3,17 +3,17 @@
   "assets": {
     "bundle.css": {
       "name": "bundle.css",
-      "path": "/home/alireza/Desktop/OnlineExam1/OnlineExam/frontend/dist/bundle.css",
+      "path": "/home/aliz/Desktop/OnlineExam/frontend/dist/bundle.css",
       "publicPath": "http://localhost:8080/bundle.css"
     },
     "bundle.js": {
       "name": "bundle.js",
-      "path": "/home/alireza/Desktop/OnlineExam1/OnlineExam/frontend/dist/bundle.js",
+      "path": "/home/aliz/Desktop/OnlineExam/frontend/dist/bundle.js",
       "publicPath": "http://localhost:8080/bundle.js"
     },
     "index.html": {
       "name": "index.html",
-      "path": "/home/alireza/Desktop/OnlineExam1/OnlineExam/frontend/dist/index.html",
+      "path": "/home/aliz/Desktop/OnlineExam/frontend/dist/index.html",
       "publicPath": "http://localhost:8080/index.html"
     }
   },

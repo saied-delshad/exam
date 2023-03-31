@@ -1,15 +1,19 @@
 from django.contrib import admin
 from exam_sessions.models import CourseExamSession, SubjectExamSession, ExamResults
+from django.db import models
+from easy_select2.widgets import Select2Multiple
 
 @admin.register(CourseExamSession)
 class CourseExamSessionAdmin(admin.ModelAdmin):
     # pass
     exclude = ['questions']
+    filter_horizontal = ('participants',)
 
 @admin.register(SubjectExamSession)
 class SubjectExamSessionAdmin(admin.ModelAdmin):
     # pass
     exclude = ['questions']
+    filter_horizontal = ('participants',)
 
 @admin.register(ExamResults)
 class ResultsExamAdmin(admin.ModelAdmin):

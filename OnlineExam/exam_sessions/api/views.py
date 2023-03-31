@@ -15,7 +15,8 @@ class SubjectSessionViewset(viewsets.ModelViewSet):
     def get_queryset(self):
         taken_exams = ExamResults.objects.filter(student = self.request.user)
         if self.request.user.is_authenticated:
-            self.queryset = self.queryset.filter(participants__in=self.request.user.groups.all())
+            # self.queryset = self.queryset.filter(participants__in=self.request.user.groups.all())
+            self.queryset = self.request.user.subject_exams.all()
         if taken_exams:
             for item in taken_exams:
                self.queryset =  self.queryset.exclude(session_ref_number = item.session_ref_number)
@@ -33,7 +34,8 @@ class CourseSessionViewset(viewsets.ModelViewSet):
     def get_queryset(self):
         taken_exams = ExamResults.objects.filter(student = self.request.user)
         if self.request.user.is_authenticated:
-            self.queryset = self.queryset.filter(participants__in=self.request.user.groups.all())
+            # self.queryset = self.queryset.filter(participants__in=self.request.user.groups.all())
+            self.queryset = self.request.user.course_exams.all()
         if taken_exams:
             for item in taken_exams:
                self.queryset =  self.queryset.exclude(session_ref_number = item.session_ref_number)
@@ -56,7 +58,6 @@ class ExamResultViewset(viewsets.ModelViewSet):
         else:
             serializer_class = ExamResultWriteSerializer
         return serializer_class
-
     def perform_create(self, serializer):
         serializer.save(student=self.request.user, 
                         session_ref_number=self.request.data.get('session_ref_number'))

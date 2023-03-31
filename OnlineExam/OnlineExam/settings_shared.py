@@ -89,7 +89,7 @@ ADMIN_REORDER = (
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django_session_timeout.middleware.SessionTimeoutMiddleware',
+    # 'django_session_timeout.middleware.SessionTimeoutMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'admin_reorder.middleware.ModelAdminReorder',
@@ -219,8 +219,8 @@ THUMBNAIL_PROCESSORS = (
 CKEDITOR_UPLOAD_PATH = 'uploads/'
 
 # SESSION AGE 1 Minutes
-SESSION_EXPIRE_SECONDS = 5*60
-SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
+# SESSION_EXPIRE_SECONDS = 5*60
+# SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
 
 # LOGGING = {
 #     'version': 1,
