@@ -88,7 +88,7 @@ class ExamResults(models.Model):
         """
         if self.session_ref_number.startswith('sub_'):
             return SubjectExamSession.objects.filter(session_ref_number=self.session_ref_number).first()
-        elif self.session_ref_number.startswith('course'):
+        elif self.session_ref_number.startswith('course_'):
             return CourseExamSession.objects.filter(session_ref_number=self.session_ref_number).first()
         else:
             return None
@@ -98,7 +98,7 @@ class ExamResults(models.Model):
         if hasattr(session, 'subject_exam'):
             return session.subject_exam.exam_duration
         elif hasattr(session, 'course_exam'):
-            return session.subject_exam.exam_duration
+            return session.course_exam.exam_duration
     
     class Meta:
         unique_together = ('student', 'session_ref_number')

@@ -13,7 +13,8 @@ ALLOWED_HOSTS = ['*']
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'exam_db',
+        # 'NAME': 'exam_db',
+        'NAME': 'back_up',
         'USER':'examiner',
         'PASSWORD':'Aliz12363',
         'HOST':'localhost',

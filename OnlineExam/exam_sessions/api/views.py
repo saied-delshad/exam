@@ -2,7 +2,8 @@ from rest_framework import viewsets
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from exam_sessions.api.permissions import IsSubscribedInSession, ExamResultOwner
-from exam_sessions.api.serializers import SubjectSessionSerializer, CourseSessionSerializer, ExamResultSerializer, ExamResultWriteSerializer
+from exam_sessions.api.serializers import (SubjectSessionSerializer, CourseSessionSerializer, 
+                                           ExamResultSerializer, ExamResultWriteSerializer)
 from exam_sessions.models import SubjectExamSession, CourseExamSession, ExamResults
 
 
@@ -59,6 +60,7 @@ class ExamResultViewset(viewsets.ModelViewSet):
             serializer_class = ExamResultWriteSerializer
         return serializer_class
     def perform_create(self, serializer):
+        print(self.request.data)
         serializer.save(student=self.request.user, 
                         session_ref_number=self.request.data.get('session_ref_number'))
 
