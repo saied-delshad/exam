@@ -47,7 +47,7 @@ class QuestionModel(models.Model):
     question_ref_code = models.CharField(max_length=10, unique=True, blank=True)
     opt_1 = RichTextUploadingField(verbose_name="A", blank=False)
     opt_2 = RichTextUploadingField(verbose_name="B", blank=False)
-    opt_3 = RichTextUploadingField(verbose_name="C", blank=False)
+    opt_3 = RichTextUploadingField(verbose_name="C", null = True, blank=True)
     opt_4 = RichTextUploadingField(verbose_name="D", null=True,blank=True)
     question_file = FilerFileField(related_name="supplementary_file", on_delete=models.CASCADE,
                                 null=True, blank=True)

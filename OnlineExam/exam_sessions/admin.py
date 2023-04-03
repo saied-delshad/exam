@@ -1,7 +1,6 @@
 from django.contrib import admin
 from exam_sessions.models import CourseExamSession, SubjectExamSession, ExamResults
 from django.db import models
-from easy_select2.widgets import Select2Multiple
 
 @admin.register(CourseExamSession)
 class CourseExamSessionAdmin(admin.ModelAdmin):
