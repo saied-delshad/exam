@@ -35,7 +35,7 @@ class SubjectInlineFormSet(BaseInlineFormSet):
         for form in self.forms:
             if form.cleaned_data and form.cleaned_data.get('noq_subject'):
                 total += form.cleaned_data['noq_subject']
-        if self.instance.noq_total != total:
+        if len(self.forms) > 0 and self.instance.noq_total != total:
             difference = self.instance.noq_total - total
             if difference > 0:
                 raise ValidationError('Total number of questions per subject is %s less\
