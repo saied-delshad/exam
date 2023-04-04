@@ -29,7 +29,7 @@ def add_ref_to_session(sender, instance, *args, **kwargs):
 
 
 @receiver(post_save, sender=CourseExamSession)
-def select_questions(sender, instance, created, **kwargs):
+def select_course_exam_questions(sender, instance, created, **kwargs):
     """
     This function select questions randomly for each subject in the exam.
     Number of questions (noq) is determined for each subject in Course Exam Model.
