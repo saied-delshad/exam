@@ -7,7 +7,7 @@ from exam_sessions.models import AbstractExamSession, CourseExamSession, Subject
 
 
 @receiver(pre_save, sender=CourseExamSession)
-def add_ref_to_session(sender, instance, *args, **kwargs):
+def add_ref_to_course_session(sender, instance, *args, **kwargs):
     """
     This function creates a unique reference number for Course Exam Sessions.
     The reference number starts with course_ses_ and continues with a code.
