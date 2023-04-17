@@ -3,5 +3,5 @@ errors.log
 .gitignore
 OnlineExam\settings.py
 core\views.py
-**\migrations\*
+*\migrations\*
 *.pyc
