@@ -1,18 +1,23 @@
 from django.contrib import admin
-from exam_sessions.models import CourseExamSession, SubjectExamSession, ExamResults
-from django.db import models
+from exam_sessions.models import CourseExamSession, SubjectExamSession, FreeExamSession, ExamResults
 
 @admin.register(CourseExamSession)
 class CourseExamSessionAdmin(admin.ModelAdmin):
     # pass
     exclude = ['questions']
     filter_horizontal = ('participants',)
+    list_display=["session_name", 'course_exam', "exam_start"]
 
 @admin.register(SubjectExamSession)
 class SubjectExamSessionAdmin(admin.ModelAdmin):
     # pass
     exclude = ['questions']
     filter_horizontal = ('participants',)
+
+@admin.register(FreeExamSession)
+class FreeExamSessionAdmin(admin.ModelAdmin):
+    readonly_fields = ['session_ref_number']
+    exclude =  ['subject_sessions', 'course_sessions']
 
 @admin.register(ExamResults)
 class ResultsExamAdmin(admin.ModelAdmin):

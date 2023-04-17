@@ -4,6 +4,7 @@ from django.conf import settings
 from django.contrib import admin
 from django.core.exceptions import ImproperlyConfigured
 
+
 try:
     from django.urls import resolve, Resolver404
 except ModuleNotFoundError:
@@ -155,3 +156,7 @@ class CustomModelAdminReorder(MiddlewareMixin):
         ordered_app_list = self.get_app_list()
         response.context_data['available_apps'] = ordered_app_list
         return response
+
+
+
+

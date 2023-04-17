@@ -1,8 +1,6 @@
 from django.db import models
-from questions.models import SubjectModel, CourseModel, QuestionModel, CourseExamModel, SubjectExamModel, PerSubjectModel
+from questions.models import QuestionModel, CourseExamModel, SubjectExamModel, PerSubjectModel
 from users.models import CustomUser
-from django.contrib.auth.models import Group
-from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db.models import JSONField
 
 
@@ -23,9 +21,10 @@ class AbstractExamSession(models.Model):
     questions = models.ManyToManyField(QuestionModel)
     is_active = models.BooleanField("Is active session?", default=True)
     session_total_seats = models.PositiveIntegerField("Total number of seats", blank = True,
-                                                      default = 1)
+                                                      null = True)
     session_occupied_seats = models.PositiveIntegerField("Number of occupied seats", blank = True,
                                                       default = 0)
+    
 
     class Meta:
         abstract = True
@@ -51,6 +50,24 @@ class CourseExamSession(AbstractExamSession):
         CourseExamModel, on_delete=models.CASCADE, related_name="sessions_course_exams")
     participants = models.ManyToManyField(CustomUser, verbose_name="Exam participant",
                                           related_name="course_exams")
+    
+
+    def course_name(self):
+        return self.course_exam.course.course_name
+    
+    def session_occupied_seats(self):
+        return self.participants.all().count()
+    
+    def get_course(self):
+        return self.course_exam.course.course_name
+    
+    
+    def remaining_seats(self):
+        if self.course_exam_fsessions.count() == 0:
+            return self.session_total_seats - self.session_occupied_seats()
+        else:
+            return 1
+        
 
     def __str__(self):
         return self.course_exam.course.course_name + '-' + self.session_ref_number
@@ -64,6 +81,45 @@ class SubjectExamSession(AbstractExamSession):
 
     def __str__(self):
         return self.subject_exam.exam_name + '-' + self.session_ref_number
+    
+    
+    def session_occupied_seats(self):
+        return self.participants.count()
+    
+    def remaining_seats(self):
+        return self.session_total_seats - self.session_occupied_seats()
+    
+class FreeExamSession(models.Model):
+    session_ref_number = models.CharField("Session reference code", max_length=20, blank=True,
+                                          editable=False, unique=True)
+    subject_sessions = models.ManyToManyField(SubjectExamSession, verbose_name="Included Subject Exams",
+                                              related_name="sub_exam_fsessions")
+    course_sessions = models.ManyToManyField(CourseExamSession, verbose_name="Included Course Exams",
+                                              related_name="course_exam_fsessions")
+    exam_start = models.DateTimeField("Exam start time")
+    show_score = models.BooleanField(
+        "Show scores at the end to the applicant?", default=False)
+    is_active = models.BooleanField("Is active session?", default=True)
+    session_total_seats = models.PositiveIntegerField("Total number of seats", blank = True,
+                                                      null = True)
+    session_occupied_seats = models.PositiveIntegerField("Number of occupied seats", blank = True,
+                                                      default = 0)
+    
+    def remaining_seats(self):
+        return self.session_total_seats - self.session_occupied_seats
+    
+    def increment_occupied(self):
+        self.session_occupied_seats +=1
+        self.save()
+
+
+    def __str__(self):
+        return 'Free Session' + '-' + str(self.exam_start)
+    
+    class Meta:
+        verbose_name = 'Free Exam Session'
+        verbose_name_plural = 'Free Exam Sessions'
+
 
 
 class ExamResults(models.Model):

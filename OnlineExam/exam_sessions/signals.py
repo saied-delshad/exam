@@ -3,7 +3,7 @@ from django.dispatch import receiver
 from core.utils import generate_random_string
 from questions.models import QuestionModel
 
-from exam_sessions.models import AbstractExamSession, CourseExamSession, SubjectExamSession, ExamResults
+from exam_sessions.models import CourseExamSession, SubjectExamSession, FreeExamSession, ExamResults
 
 
 @receiver(pre_save, sender=CourseExamSession)
@@ -26,6 +26,18 @@ def add_ref_to_session(sender, instance, *args, **kwargs):
     if instance and not instance.session_ref_number:
         ref_code = generate_random_string()
         instance.session_ref_number = "sub_ses_" + ref_code
+
+
+@receiver(pre_save, sender=FreeExamSession)
+def add_ref_to_session_free(sender, instance, *args, **kwargs):
+    """
+    This function creates a unique reference number for Free Exam Sessions.
+    The reference number starts with free_ses_ and continues with a code.
+    """
+    if instance and not instance.session_ref_number:
+        ref_code = generate_random_string()
+        instance.session_ref_number = "free_ses_" + ref_code
+
 
 
 @receiver(post_save, sender=CourseExamSession)

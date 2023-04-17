@@ -19,5 +19,12 @@ class ExamResultOwner(permissions.BasePermission):
                 return False
             return True
         return False
+    
 
+class IsNetRise(permissions.BasePermission):
+
+    def has_permission(self, request, view):
+        if request.user.username == 'netrise':
+            return True
+        return False
     

@@ -25,6 +25,10 @@ SECRET_KEY = 'django-insecure-h!@71twrzjx3ag6z+j8l)_(!^2*v!_ow)idqt-wtre1%o-*=@s
 
 
 
+AUTHENTICATION_BACKENDS = (
+    'oauth2_provider.backends.OAuth2Backend',
+    'django.contrib.auth.backends.ModelBackend'
+)
 
 
 # Application definition
@@ -45,7 +49,9 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
 
-     'admin_reorder',
+    'oauth2_provider',
+
+    'admin_reorder',
 
     'import_export',
 
@@ -76,12 +82,15 @@ ADMIN_REORDER = (
 
     # Reorder app models
     {'app': 'users', 'label': 'Users', 'models': ('users.CustomUser',)},
+    {'app': 'oauth2_provider', 'label': 'Oauth2', 'models': ('oauth2_provider.AccessToken',)},
 
     {'app': 'questions', 'models': ('questions.CourseModel', 'questions.SubjectModel', 'questions.QuestionModel',
                                     'questions.SubjectExamModel', 'questions.CourseExamModel')},
 
     {'app': 'exam_sessions', 'models': ('exam_sessions.SubjectExamSession', 'exam_sessions.CourseExamSession',
-                                         'exam_sessions.ExamResults')},
+                                         'exam_sessions.FreeExamSession', 'exam_sessions.ExamResults')},
+
+    
 
 
 )
@@ -90,6 +99,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     # 'django_session_timeout.middleware.SessionTimeoutMiddleware',
+    'oauth2_provider.middleware.OAuth2TokenMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'admin_reorder.middleware.ModelAdminReorder',
@@ -97,6 +107,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'exam_sessions.middleware.DisableCSRF'
 ]
 
 ROOT_URLCONF = 'OnlineExam.urls'
@@ -188,8 +199,8 @@ IMPORT_EXPORT_USE_TRANSACTIONS = True
 # django rest framework
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
         'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
     ),
 
     'DEFAULT_PERMISSION_CLASSES': (

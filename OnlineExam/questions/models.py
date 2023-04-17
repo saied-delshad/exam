@@ -9,7 +9,7 @@ from filer.fields.file import FilerFileField
 
 
 class CourseModel(models.Model):
-    course_name = models.CharField("Course name", max_length=100)
+    course_name = models.CharField("Course name", max_length=100, unique = True)
     created_at = models.DateTimeField("Created at", auto_now_add=True)
     
 
@@ -82,7 +82,7 @@ class AbstractExamModel(models.Model):
 
 
 class SubjectExamModel(AbstractExamModel):
-    subject = models.ForeignKey(SubjectModel, related_name="subject_exams", on_delete=models.CASCADE)
+    subject = models.OneToOneField(SubjectModel, related_name="subject_exams", on_delete=models.CASCADE)
     
     
     class Meta:
@@ -93,7 +93,7 @@ class SubjectExamModel(AbstractExamModel):
         return self.exam_name + self.subject.subject_name
 
 class CourseExamModel(AbstractExamModel):
-    course = models.ForeignKey(CourseModel, on_delete = models.CASCADE,
+    course = models.OneToOneField(CourseModel, on_delete = models.CASCADE,
                                                 related_name = "course_exam")
     tracker = FieldTracker(fields=['course'])
     
