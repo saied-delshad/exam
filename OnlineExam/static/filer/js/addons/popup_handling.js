@@ -12,7 +12,7 @@ if (django.jQuery) {
     function windowname_to_id(text) {
         text = text.replace(/__dot__/g, '.');
         text = text.replace(/__dash__/g, '-');
-        return text;
+        return text.split('__')[0];
     }
 
     window.dismissPopupAndReload = function (win) {
@@ -33,6 +33,7 @@ if (django.jQuery) {
         element.val(chosenId);
         element.closest('.js-filer-dropzone').addClass('js-object-attached');
         image.attr('src', chosenThumbnailUrl).removeClass('hidden');
+        image.removeAttr('srcset');  // would be nicer, but much more complicate to also replace 'srcset'
         descriptionText.text(chosenDescriptionTxt);
         clearer.removeClass('hidden');
         lookup.addClass('related-lookup-change');

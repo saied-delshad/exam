@@ -12,8 +12,8 @@ class QuestionViewset(viewsets.ModelViewSet):
     serializer_class = QuestionSerializer
     permission_classes = [IsAuthenticated]
 
-    def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user)
+    # def perform_create(self, serializer):
+    #     serializer.save(created_by=self.request.user)
 
     def get_queryset(self):
 

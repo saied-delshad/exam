@@ -126,7 +126,8 @@ class SessionRegister(views.APIView):
                     course_exam_session = CourseExamSession.objects.create(course_exam = course_exam,
                                                                            session_name="fx-"+f_exam.session_ref_number,
                                                                            exam_start=f_exam.exam_start,
-                                                                           show_score=f_exam.show_score)
+                                                                           show_score=f_exam.show_score, 
+                                                                           session_total_seats =f_exam.session_total_seats)
                 course_exam_session.participants.add(applicant)
                 f_exam.increment_occupied()
                 f_exam.course_sessions.add(course_exam_session)

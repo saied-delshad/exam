@@ -31,7 +31,7 @@
                         @click="startSession(session)"
                         class="btn btn-outline-success"
                     >
-                        {{ session.session_name }}
+                        {{ session.course_name }} Start Exam
                     </button>
                     <p>Exam Description: {{ session.session_descriptions }}</p>
                 </base-card>
