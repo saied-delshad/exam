@@ -140,7 +140,7 @@ def finish_send_score(sender, instance, created, **kwargs):
         else:
             ref_code = instance.session_ref_number
         nid = instance.student.username
-        score = str(instance.score)
+        score = str(int(instance.score))
         d_date = str(instance.get_session().exam_start.date())
         t_date = str(instance.get_session().exam_start.time())
         date = d_date + ' ' + t_date
