@@ -127,7 +127,8 @@ def has_exam_finished(sender, instance, *args, **kwargs):
         if exam_session.show_score:
             instance.show_score = True
 
-        instance.fsession_ref_number = f_session.session_ref_number
+        if f_session:
+            instance.fsession_ref_number = f_session.session_ref_number
 
 
 
