@@ -13,7 +13,6 @@ def send_score(ref_code, nid, score, date, passed=0):
             "date": date,
             "passed": passed
           }
-
     response = requests.post(URL, json=js, verify=False)
-    print(response.json)
+    data = response.json()
     return response
