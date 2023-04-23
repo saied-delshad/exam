@@ -14,5 +14,4 @@ def send_score(ref_code, nid, score, date, passed=0):
             "passed": passed
           }
     response = requests.post(URL, json=js, verify=False)
-    data = response.json()
     return response
