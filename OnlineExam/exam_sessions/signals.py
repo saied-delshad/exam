@@ -2,6 +2,7 @@ from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from core.utils import generate_random_string
 from questions.models import QuestionModel
+from exam_sessions.send_scores import send_score
 
 from exam_sessions.models import CourseExamSession, SubjectExamSession, FreeExamSession, ExamResults
 
@@ -82,6 +83,8 @@ def has_exam_finished(sender, instance, *args, **kwargs):
         session = instance.get_session()
         questions = session.questions.all()
         answers = instance.answers
+        if answers == None:
+            answers = {}
         correctly_answered_questions = []
         not_answered = {}
         instance.num_not_answered = 0
@@ -106,14 +109,47 @@ def has_exam_finished(sender, instance, *args, **kwargs):
         instance.not_answered = not_answered
         instance.wrong_answers = wrong_answered
         ## to be used for checking pass/fail
-    
-    if not instance.pk and instance.session_ref_number:
-        if instance.session_ref_number.startswith('sub'):
-            exam = SubjectExamSession.objects.get(session_ref_number = instance.session_ref_number)
-        elif instance.session_ref_number.startswith('course'):
-            exam = CourseExamSession.objects.get(session_ref_number = instance.session_ref_number)
-        if exam.show_score:
+        exam_session = instance.get_session()
+
+        f_session = None
+        instance.is_passed = False
+        if exam_session.session_ref_number.startswith('course'):
+            exam = exam_session.course_exam
+            if exam_session.course_exam_fsessions.all().count() > 0:
+                f_session = exam_session.course_exam_fsessions.first()
+        elif exam_session.session_ref_number.startswith('sub'):
+            exam = exam_session.subject_exam
+            if exam_session.sub_exam_fsessions.all().count() > 0:
+                f_session = exam_session.sub_exam_fsessions.first()
+        if instance.score >= exam.pass_score:
+            instance.is_passed = True
+
+        if exam_session.show_score:
             instance.show_score = True
+
+        instance.fsession_ref_number = f_session.session_ref_number
+
+
+
+@receiver(post_save, sender=ExamResults) 
+def finish_send_score(sender, instance, created, **kwargs):
+    if instance.is_finished and instance.score:
+        if instance.fsession_ref_number:
+            ref_code = instance.fsession_ref_number
+        else:
+            ref_code = instance.session_ref_number
+        nid = instance.student.username
+        score = instance.score
+        d_date = str(instance.get_session().exam_start.date())
+        t_date = str(instance.get_session().exam_start.time())
+        date = d_date + ' ' + t_date
+        passed = int(instance.is_passed)
+        send_score(ref_code, nid, score, date, passed=passed)
+        
+            
+        
+
+
 
 
 
