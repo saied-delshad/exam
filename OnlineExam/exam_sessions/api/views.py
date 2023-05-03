@@ -4,6 +4,7 @@ from rest_framework import views
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
+from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 import itertools
 from datetime import datetime
@@ -87,11 +88,13 @@ class SessionsViewset(generics.ListAPIView):
                 course_exam = CourseModel.objects.get(course_name = course_name).course_exam
             except:
                 course_exam = None
-            return list(itertools.chain(CourseExamSession.objects.filter(is_active=True, exam_start__gt= datetime.now(),
-                                                                         course_exam = course_exam),
+            return list(itertools.chain(CourseExamSession.objects.filter(~Q(session_name__startswith='fx-free'),
+                                                    is_active=True, exam_start__gt= datetime.now(),
+                                                    course_exam = course_exam),
                                         FreeExamSession.objects.filter(is_active=True, exam_start__gt= datetime.now())))
         else:
-            return list(itertools.chain(CourseExamSession.objects.filter(is_active=True, exam_start__gt= datetime.now()),
+            return list(itertools.chain(CourseExamSession.objects.filter(~Q(session_name__startswith='fx-free'),
+                                        is_active=True, exam_start__gt= datetime.now()),
                                         FreeExamSession.objects.filter(is_active=True, exam_start__gt= datetime.now())))
     
     
