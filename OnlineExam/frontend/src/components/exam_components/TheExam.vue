@@ -141,7 +141,7 @@ export default {
                 console.log(data)
                 const midvar = [];
                 midvar.push(...data);
-                this.Questions = JSON.parse(JSON.stringify(midvar));
+                this.Questions = this.shuffleQuestions(JSON.parse(JSON.stringify(midvar)));
                 this.getAnswers()
             });
         },
@@ -190,6 +190,21 @@ export default {
             } else {
                 this.NavigateQ = false;
             }
+
+        },
+
+        shuffleQuestions(qs) {
+            let questions = qs;
+            let loop = questions.length;
+            let sorted_quests = [];
+            for (let i = 0; i < loop; i++) {
+
+                let randomIndex = Math.floor(Math.random() * questions.length)
+                sorted_quests.push(questions[randomIndex]);
+                questions.splice(randomIndex, 1)
+            }
+
+            return sorted_quests
 
         },
 

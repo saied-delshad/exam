@@ -55,6 +55,7 @@ def select_course_exam_questions(sender, instance, created, **kwargs):
         for exam_subject in exam_subjects:
             noq = per_subject_exam.get(subject=exam_subject).noq_subject
             questions = exam_subject.sub_questions.order_by('?')[:noq]
+            print(questions)
             instance.questions.add(*questions)
 
 
