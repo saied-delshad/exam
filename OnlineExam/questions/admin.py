@@ -66,6 +66,8 @@ class AddSubjectQInline(admin.StackedInline):
 @admin.register(CourseExamModel)
 class CourseExamModelAdmin(admin.ModelAdmin):
 
+    list_display = ['course', 'noq_total','exam_duration', 'pass_score', 'is_active', 'has_penalty' ]
+
     inlines = [AddSubjectQInline]
 
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):

@@ -4,7 +4,7 @@
         <table class="table table-bordered">
             <tr v-for="row in tableHeight(Questions)" :key="row">
                 <td v-for="col in tableLength(Questions)" :key="col"
-                @click="goToQuestion(cellNumber(row, col, Questions))" :class="classColor(row, col, Questions)">
+                @click="goToQuestion(cellNumber(row, col, Questions))" :class="classColor(row, col, Questions, marked)">
                         {{ cellNumber(row, col, Questions) }}
                 </td>
             </tr>
@@ -18,11 +18,8 @@
 export default {
    
 
-    props: ['Questions'],
+    props: ['Questions', 'marked'],
 
-    // emits: {
-    // 'go-to-question'
-    // }
 
     methods: {
         length(qs) {
@@ -57,12 +54,15 @@ export default {
             }
             },
         
-        classColor(r, c, qs) {
+        classColor(r, c, qs, marked) {
             const n = this.cellNumber(r, c, qs);
             if (isNaN(n)) {
                 return 'n-answered'
             }
-            if (isNaN(qs[n-1]['givenAnswer'])) {
+            if (marked.includes(qs[n-1]['question_ref_code'])) {
+                return 'marked'
+            }
+            if (isNaN(qs[n-1]['givenAnswer']) | qs[n-1]['givenAnswer'] == null) {
                 return 'n-answered'
             }
             else {
@@ -126,5 +126,9 @@ td {
 
 .n-answered {
     background-color: gray;
+}
+
+.marked {
+    background-color: #ffc107;
 }
 </style>

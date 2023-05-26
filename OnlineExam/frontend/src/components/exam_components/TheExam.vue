@@ -10,19 +10,21 @@
                         :questionRefCode="Questions[displayedQ]['question_ref_code']"
                         :questionNo="displayedQ"
                         :question="Questions[displayedQ]['question_content']"
+                        :isMarked="markedQuestions.includes(Questions[displayedQ]['question_ref_code'])"
                         :answers="answers()"
                         :givenAnswer="Questions[displayedQ].givenAnswer"
                         @update-answer="updateAnswer"
+                        @mark-question="markQuestion"
+                        @previous-question="prevQ"
+                        @clear-answer="clearAnswer"
                     ></question>
                 </div>
                 <div class="container-fluid container-btn">
-                    <button v-if="displayedQ>0" class="btn btn-info float-left butt" @click="PrevQ">
-                        <span class="fa fa-hand-point-left">
-                         </span> Previous</button>
-                    <button v-if="displayedQ+1<Object.keys(Questions).length"
+                    
+                    <!-- <button v-if="displayedQ+1<Object.keys(Questions).length"
                      class="btn btn-info float-right butt" @click="NextQ">Next <span class="fa fa-hand-point-right">
                          </span>
-                     </button>
+                     </button> -->
                     <button v-if="displayedQ+1==Object.keys(Questions).length"
                      class="btn btn-danger float-right butt" @click="finishExam">Finish</button>
                 </div>
@@ -35,7 +37,7 @@
         <div class="col col-md-auto t-container">
                 <!-- <h3>Question List</h3>
                 <p>Click on the box to go to the question</p> -->
-            <question-navigator :Questions="Questions" @go-to-question="goToQuestion"/>
+            <question-navigator :Questions="Questions" :marked="markedQuestions" @go-to-question="goToQuestion"/>
                 <!-- <button @click="SwitchNav('close')" class="btn btn-sm btn-primary">Close
                 </button> -->
         
@@ -71,6 +73,7 @@ export default {
     data() {
         return {
             Questions: [],
+            markedQuestions: [],
             displayedQ: 0,
             SessionId: '',
             Answers: {},
@@ -98,8 +101,9 @@ export default {
             return answers
         },
 
-        PrevQ() {
+        prevQ(Qid) {
             if (this.displayedQ > 0) {
+                console.log(Qid)
                 this.displayedQ--;
             }
         },
@@ -111,22 +115,54 @@ export default {
             }
         },
 
-        updateAnswer(Qid, newAnswer, arg) {
+        updateAnswer(Qid, newAnswer) {
             const identQ = this.Questions.find(
                 (question) => question.id === Qid
             );
-            identQ['givenAnswer'] = newAnswer;
-            this.Answers[identQ.question_ref_code] = newAnswer;
-            let data = {'answers':this.Answers};
-            console.log(data);
-            let endpoint = "api/results/" + this.SessionId + '/';
-            patchAxios(endpoint, data).then( response => {
-                console.log(response.data);}).catch(e => {
-                    console.log(e);
-                });
-            if (arg=='next') {
-                this.NextQ();
+            if (newAnswer != null) {
+                identQ['givenAnswer'] = newAnswer;
+                this.Answers[identQ.question_ref_code] = newAnswer;
+                let data = {'answers':this.Answers};
+                console.log(data);
+                let endpoint = "api/results/" + this.SessionId + '/';
+                patchAxios(endpoint, data).then( response => {
+                    console.log(response.data);}).catch(e => {
+                        console.log(e);
+                    });
             }
+            this.NextQ();
+        },
+
+        markQuestion(Qid) {
+            const identQ = this.Questions.find(
+                (question) => question.id === Qid
+            );
+            const index = this.markedQuestions.indexOf(identQ.question_ref_code)
+            if (index > -1) {
+                this.markedQuestions.splice(index, 1)
+
+            }
+            else {
+                this.markedQuestions.push(identQ.question_ref_code)
+            }
+
+        },
+
+        clearAnswer(Qid) {
+            const id = this.Questions[this.displayedQ]['id'];
+            if (id === Qid) {
+                this.Questions[this.displayedQ].givenAnswer = null;
+                this.Questions[this.displayedQ].givenAnswer = null;
+                this.Answers[this.Questions[this.displayedQ].question_ref_code] = null;
+                let data = {'answers':this.Answers};
+                console.log(data);
+                let endpoint = "api/results/" + this.SessionId + '/';
+                patchAxios(endpoint, data).then( response => {
+                    console.log(response.data);}).catch(e => {
+                        console.log(e);
+                    });
+            }
+
         },
 
         goToQuestion(qnum) {

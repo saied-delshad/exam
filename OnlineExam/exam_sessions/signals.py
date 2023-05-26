@@ -90,6 +90,7 @@ def has_exam_finished(sender, instance, *args, **kwargs):
         not_answered = {}
         instance.num_not_answered = 0
         wrong_answered = {}
+        penalties = 0
         instance.num_wrong = 0
         for question in session.questions.all():
             question.numb_of_appeared = question.numb_of_appeared + 1 
@@ -105,7 +106,9 @@ def has_exam_finished(sender, instance, *args, **kwargs):
                 instance.num_wrong +=1
                 wrong_answered.update({ref:answer})
             question.save()
-        score = 100*len(correctly_answered_questions)/questions.count()
+        if session.has_penalty():
+            penalties = len(wrong_answered)/session.penalized_for()
+        score = 100*(len(correctly_answered_questions)-penalties)/questions.count()
         instance.score = score
         instance.not_answered = not_answered
         instance.wrong_answers = wrong_answered

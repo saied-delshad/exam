@@ -73,6 +73,9 @@ class AbstractExamModel(models.Model):
                                          default=1)
     
     pass_score = models.IntegerField(validators=[MaxValueValidator(100), MinValueValidator(0)], default=50)
+    has_penalty = models.BooleanField("Has penalty for wrong answers?", default=False)
+    penalize_for = models.IntegerField("How many wrong answers penalizes one score?", 
+                                       validators=[MaxValueValidator(10), MinValueValidator(1)], default=4)
     is_active = models.BooleanField("Exam model is active?", default=True)
     created_at = models.DateTimeField("Created at", auto_now_add=True)
 
@@ -90,7 +93,7 @@ class SubjectExamModel(AbstractExamModel):
 
 
     def __str__(self):
-        return self.exam_name + self.subject.subject_name
+        return self.subject.subject_name
 
 class CourseExamModel(AbstractExamModel):
     course = models.OneToOneField(CourseModel, on_delete = models.CASCADE,
@@ -103,7 +106,7 @@ class CourseExamModel(AbstractExamModel):
 
 
     def __str__(self):
-        return self.exam_name + self.course.course_name
+        return self.course.course_name
 
 class PerSubjectModel(models.Model):
     course_exam = models.ForeignKey(CourseExamModel, on_delete=models.CASCADE,

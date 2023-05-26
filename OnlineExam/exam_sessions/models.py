@@ -61,7 +61,12 @@ class CourseExamSession(AbstractExamSession):
     def get_course(self):
         return self.course_exam.course.course_name
     
+    def has_penalty(self):
+        return self.course_exam.has_penalty
     
+    def penalized_for(self):
+        return self.course_exam.penalize_for
+
     def remaining_seats(self):
         if self.course_exam_fsessions.count() == 0:
             return self.session_total_seats - self.session_occupied_seats()
@@ -88,6 +93,12 @@ class SubjectExamSession(AbstractExamSession):
     
     def remaining_seats(self):
         return self.session_total_seats - self.session_occupied_seats()
+    
+    def has_penalty(self):
+        return self.subject_exam.has_penalty
+    
+    def penalized_for(self):
+        return self.subject_exam.penalize_for
     
 class FreeExamSession(models.Model):
     session_ref_number = models.CharField("Session reference code", max_length=20, blank=True,
