@@ -25,7 +25,7 @@ from core.views import IndexTemplateView
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('exadmin/', admin.site.urls),
 
     path('accounts/register/', RegistrationView.as_view(
         form_class = CustomUserForm,

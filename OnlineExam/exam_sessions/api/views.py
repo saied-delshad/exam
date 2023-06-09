@@ -139,6 +139,10 @@ class SessionRegister(views.APIView):
             return Response(request.data, status=status.HTTP_201_CREATED)               
 
 
+class ViewDetailResult(views.APIView):
+    lookup_field = "session_ref_number"
+    permission_classes = [IsAuthenticated, ExamResultOwner]
+
             
 
 

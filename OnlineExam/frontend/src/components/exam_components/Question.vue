@@ -9,8 +9,9 @@
           <h4 v-html=rectifiedQ(questionNo,question)></h4>
         </div>
         <div v-for="(answer, ind) in answers" :key="ind" class="form-check">
-          <input v-if="answer != null" :id="id + ind" :name="id+ ind" :value="ind" type="radio" class="form-check-input" v-model="yourAnswer" />
-          <b>{{ choices[ind] }}. </b> <label :for="id + ind"  v-html=answer class="form-check-label"></label>
+          <input v-if="answer != null" :id="id + ind" :name="id+ ind" :value="ind" type="radio" 
+          class="form-check-input" v-model="yourAnswer" />
+          <b v-if="answer != null">{{ choices[ind] }}. </b> <label :for="id + ind"  v-html=answer class="form-check-label"></label>
         </div>
         <div class="container-fluid container-btn">
           <button v-if="givenAnswer == null && ! isMarked" class="btn btn-warning" style="margin-left: 30%;" 
