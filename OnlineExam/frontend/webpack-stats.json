@@ -11,67 +11,23 @@
       "path": "/home/aliz/Desktop/OnlineExam/frontend/dist/bundle.js",
       "publicPath": "http://localhost:8080/bundle.js"
     },
+    "bundle.js.map": {
+      "name": "bundle.js.map",
+      "path": "/home/aliz/Desktop/OnlineExam/frontend/dist/bundle.js.map",
+      "publicPath": "http://localhost:8080/bundle.js.map"
+    },
     "index.html": {
       "name": "index.html",
       "path": "/home/aliz/Desktop/OnlineExam/frontend/dist/index.html",
       "publicPath": "http://localhost:8080/index.html"
-    },
-    "app.ca1d37bd76e878420b3b.hot-update.js": {
-      "name": "app.ca1d37bd76e878420b3b.hot-update.js",
-      "path": "/home/aliz/Desktop/OnlineExam/frontend/dist/app.ca1d37bd76e878420b3b.hot-update.js",
-      "publicPath": "http://localhost:8080/app.ca1d37bd76e878420b3b.hot-update.js"
-    },
-    "ca1d37bd76e878420b3b.hot-update.json": {
-      "name": "ca1d37bd76e878420b3b.hot-update.json",
-      "path": "/home/aliz/Desktop/OnlineExam/frontend/dist/ca1d37bd76e878420b3b.hot-update.json",
-      "publicPath": "http://localhost:8080/ca1d37bd76e878420b3b.hot-update.json"
-    },
-    "app.989adcd2da3c8b7cda37.hot-update.js": {
-      "name": "app.989adcd2da3c8b7cda37.hot-update.js",
-      "path": "/home/aliz/Desktop/OnlineExam/frontend/dist/app.989adcd2da3c8b7cda37.hot-update.js",
-      "publicPath": "http://localhost:8080/app.989adcd2da3c8b7cda37.hot-update.js"
-    },
-    "989adcd2da3c8b7cda37.hot-update.json": {
-      "name": "989adcd2da3c8b7cda37.hot-update.json",
-      "path": "/home/aliz/Desktop/OnlineExam/frontend/dist/989adcd2da3c8b7cda37.hot-update.json",
-      "publicPath": "http://localhost:8080/989adcd2da3c8b7cda37.hot-update.json"
-    },
-    "app.78d4944eb47c456fe0f2.hot-update.js": {
-      "name": "app.78d4944eb47c456fe0f2.hot-update.js",
-      "path": "/home/aliz/Desktop/OnlineExam/frontend/dist/app.78d4944eb47c456fe0f2.hot-update.js",
-      "publicPath": "http://localhost:8080/app.78d4944eb47c456fe0f2.hot-update.js"
-    },
-    "78d4944eb47c456fe0f2.hot-update.json": {
-      "name": "78d4944eb47c456fe0f2.hot-update.json",
-      "path": "/home/aliz/Desktop/OnlineExam/frontend/dist/78d4944eb47c456fe0f2.hot-update.json",
-      "publicPath": "http://localhost:8080/78d4944eb47c456fe0f2.hot-update.json"
-    },
-    "app.33e6d3319a33d4f773b7.hot-update.js": {
-      "name": "app.33e6d3319a33d4f773b7.hot-update.js",
-      "path": "/home/aliz/Desktop/OnlineExam/frontend/dist/app.33e6d3319a33d4f773b7.hot-update.js",
-      "publicPath": "http://localhost:8080/app.33e6d3319a33d4f773b7.hot-update.js"
-    },
-    "33e6d3319a33d4f773b7.hot-update.json": {
-      "name": "33e6d3319a33d4f773b7.hot-update.json",
-      "path": "/home/aliz/Desktop/OnlineExam/frontend/dist/33e6d3319a33d4f773b7.hot-update.json",
-      "publicPath": "http://localhost:8080/33e6d3319a33d4f773b7.hot-update.json"
-    },
-    "app.37bf6e8ecf2e212ce090.hot-update.js": {
-      "name": "app.37bf6e8ecf2e212ce090.hot-update.js",
-      "path": "/home/aliz/Desktop/OnlineExam/frontend/dist/app.37bf6e8ecf2e212ce090.hot-update.js",
-      "publicPath": "http://localhost:8080/app.37bf6e8ecf2e212ce090.hot-update.js"
-    },
-    "37bf6e8ecf2e212ce090.hot-update.json": {
-      "name": "37bf6e8ecf2e212ce090.hot-update.json",
-      "path": "/home/aliz/Desktop/OnlineExam/frontend/dist/37bf6e8ecf2e212ce090.hot-update.json",
-      "publicPath": "http://localhost:8080/37bf6e8ecf2e212ce090.hot-update.json"
     }
   },
   "chunks": {
     "app": [
       "bundle.css",
       "bundle.js",
-      "app.37bf6e8ecf2e212ce090.hot-update.js"
+      "bundle.css.map",
+      "bundle.js.map"
     ]
   },
   "publicPath": "http://localhost:8080/"

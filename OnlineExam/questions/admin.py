@@ -11,12 +11,7 @@ class CourseModelAdmin(admin.ModelAdmin):
 
 @admin.register(SubjectModel)
 class SubjectModelAdmin(admin.ModelAdmin):
-    list_display = ['subject_name', 'created_at', 'get_courses' ]
-
-    def get_courses(self, obj):
-        return "\n".join([s.course_name for s in obj.course.all()])
-    
-    get_courses.short_description = 'Courses'
+    list_display = ['subject_name', 'created_at', 'course']
 
 @admin.register(QuestionModel)
 class QuestionModelAdmin(ImportExportModelAdmin):

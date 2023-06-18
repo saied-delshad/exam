@@ -25,10 +25,10 @@ class SubjectModel(models.Model):
     instruction_hours = models.PositiveSmallIntegerField("Instruction hours", validators=[
         MaxValueValidator(200)])
     created_at = models.DateTimeField("Created at" ,auto_now_add=True)
-    course = models.ManyToManyField(CourseModel, related_name="subjects")
+    course = models.ForeignKey(CourseModel(), on_delete=models.CASCADE, related_name="subjects")
 
     def __str__(self):
-        return self.subject_name
+        return self.subject_name + ' - ' + self.course.course_name
 
     class Meta:
         verbose_name = "Subject"

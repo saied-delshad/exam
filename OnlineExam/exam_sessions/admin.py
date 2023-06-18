@@ -3,12 +3,14 @@ from exam_sessions.models import CourseExamSession, SubjectExamSession, FreeExam
 
 @admin.register(CourseExamSession)
 class CourseExamSessionAdmin(admin.ModelAdmin):
+    # pass
     exclude = ['questions']
     filter_horizontal = ('participants',)
     list_display=["session_name", 'course_exam', "exam_start"]
 
 @admin.register(SubjectExamSession)
 class SubjectExamSessionAdmin(admin.ModelAdmin):
+    # pass
     exclude = ['questions']
     filter_horizontal = ('participants',)
 
@@ -19,4 +21,4 @@ class FreeExamSessionAdmin(admin.ModelAdmin):
 
 @admin.register(ExamResults)
 class ResultsExamAdmin(admin.ModelAdmin):
-    list_display = ['student', 'get_session', 'created_at', 'is_finished', 'score', 'num_wrong']
+    list_display = ['student', 'created_at', 'is_finished', 'score']

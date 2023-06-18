@@ -14,7 +14,5 @@ urlpatterns = [
     path("", include(router.urls)),
     path("get-sessions/", csrf_exempt(sv.SessionRegister.as_view()), name="get_sessions"),
     path("list-sessions/", sv.SessionsViewset.as_view(), name="list_sessions"),
-    path("list-sessions/<str:course>", sv.SessionsViewset.as_view(), name="list_course_sessions"),
-    path("detail-result/<str:studentId>/<str:sessionRef>/", sv.ViewDetailResult.as_view(), name="detail_result")
-
+    path("list-sessions/<str:course>", sv.SessionsViewset.as_view(), name="list_course_sessions")
 ]

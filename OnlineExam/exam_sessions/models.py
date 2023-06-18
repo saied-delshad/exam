@@ -149,8 +149,6 @@ class ExamResults(models.Model):
     is_finished = models.BooleanField("Exam is finished", default=False)
     show_score = models.BooleanField("Show score at the end of the exam?", default=False)
     fsession_ref_number = models.CharField("Free Session reference code", max_length=20, null=True, blank=True)
-    exam_snapshot = JSONField("Snapshot", blank = True, null = True)
-
 
     def get_session(self):
         """

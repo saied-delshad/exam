@@ -92,7 +92,6 @@ def has_exam_finished(sender, instance, *args, **kwargs):
         wrong_answered = {}
         penalties = 0
         instance.num_wrong = 0
-        instance.exam_snapshot = {}
         for question in session.questions.all():
             question.numb_of_appeared = question.numb_of_appeared + 1 
             ref = question.question_ref_code
@@ -106,9 +105,6 @@ def has_exam_finished(sender, instance, *args, **kwargs):
             else:
                 instance.num_wrong +=1
                 wrong_answered.update({ref:answer})
-            instance.exam_snapshot.update({ref:{'question': question.question_content, 'opt_1': question.opt_1,
-                                          'opt_2': question.opt_2, 'opt_3': question.opt_3, 'opt_4': question.opt_4,
-                                          'correct_answer': question.correct_answer-1, 'given_answer': answer}})
             question.save()
         if session.has_penalty():
             penalties = len(wrong_answered)/session.penalized_for()
