@@ -10,8 +10,10 @@ class CourseModelAdmin(admin.ModelAdmin):
     list_display = ['course_name', 'created_at']
 
 @admin.register(SubjectModel)
-class SubjectModelAdmin(admin.ModelAdmin):
+class SubjectModelAdmin(ImportExportModelAdmin):
     list_display = ['subject_name', 'created_at', 'course']
+    list_filter = ['course']
+    search_fields = ['subject_name']
 
 @admin.register(QuestionModel)
 class QuestionModelAdmin(ImportExportModelAdmin):
