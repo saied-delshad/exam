@@ -8,11 +8,11 @@ from django.core.exceptions import ValidationError
 @admin.register(CourseModel)
 class CourseModelAdmin(admin.ModelAdmin):
     list_display = ['course_name', 'created_at']
+    filter_horizontal = ('subjects',)
 
 @admin.register(SubjectModel)
 class SubjectModelAdmin(ImportExportModelAdmin):
-    list_display = ['subject_name', 'created_at', 'course']
-    list_filter = ['course']
+    list_display = ['subject_name', 'created_at']
     search_fields = ['subject_name']
 
 @admin.register(QuestionModel)

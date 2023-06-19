@@ -84,7 +84,7 @@ ADMIN_REORDER = (
     {'app': 'users', 'label': 'Users', 'models': ('users.CustomUser',)},
     {'app': 'oauth2_provider', 'label': 'Oauth2', 'models': ('oauth2_provider.AccessToken',)},
 
-    {'app': 'questions', 'models': ('questions.CourseModel', 'questions.SubjectModel', 'questions.QuestionModel',
+    {'app': 'questions', 'models': ('questions.SubjectModel', 'questions.CourseModel', 'questions.QuestionModel',
                                     'questions.SubjectExamModel', 'questions.CourseExamModel')},
 
     {'app': 'exam_sessions', 'models': ('exam_sessions.SubjectExamSession', 'exam_sessions.CourseExamSession',

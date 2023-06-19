@@ -8,30 +8,31 @@ from model_utils import FieldTracker
 from filer.fields.file import FilerFileField
 
 
-class CourseModel(models.Model):
-    course_name = models.CharField("Course name", max_length=100, unique = True)
-    created_at = models.DateTimeField("Created at", auto_now_add=True)
-    
-
-    class Meta:
-        verbose_name = "Course"
-
-    def __str__(self):
-        return self.course_name
-
 
 class SubjectModel(models.Model):
     subject_name = models.CharField("Subject", max_length=100)
     instruction_hours = models.PositiveSmallIntegerField("Instruction hours", validators=[
         MaxValueValidator(200)])
     created_at = models.DateTimeField("Created at" ,auto_now_add=True)
-    course = models.ForeignKey(CourseModel(), on_delete=models.CASCADE, related_name="subjects")
+    # course = models.ForeignKey(CourseModel(), on_delete=models.CASCADE, related_name="subjects")
 
     def __str__(self):
-        return self.subject_name + ' - ' + self.course.course_name
+        return self.subject_name
 
     class Meta:
         verbose_name = "Subject"
+
+
+class CourseModel(models.Model):
+    course_name = models.CharField("Course name", max_length=100, unique = True)
+    created_at = models.DateTimeField("Created at", auto_now_add=True)
+    subjects = models.ManyToManyField(SubjectModel, related_name = 'sub_courses')
+
+    class Meta:
+        verbose_name = "Course"
+
+    def __str__(self):
+        return self.course_name
 
 
 
