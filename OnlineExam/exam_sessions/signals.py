@@ -149,7 +149,10 @@ def finish_send_score(sender, instance, created, **kwargs):
         t_date = str(instance.get_session().exam_start.time())
         date = d_date + ' ' + t_date
         passed = str(int(instance.is_passed))
-        send_score(ref_code, nid, score, date, passed=passed)
+        try:
+            send_score(ref_code, nid, score, date, passed=passed)
+        except:
+            pass
         
             
         
