@@ -178,6 +178,12 @@ export default {
                 const midvar = [];
                 midvar.push(...data);
                 this.Questions = this.shuffleQuestions(JSON.parse(JSON.stringify(midvar)));
+                if (this.Questions.length == 0) {
+                    this.$router.push({
+                        name: "Home",
+                        params: {},
+                    });
+                }
                 this.getAnswers()
             });
         },

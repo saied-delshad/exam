@@ -17,7 +17,7 @@ from questions.models import CourseModel
 
 
 class SubjectSessionViewset(viewsets.ModelViewSet):
-    queryset = SubjectExamSession.objects.all()
+    queryset = SubjectExamSession.objects.filter(is_active=True)
     lookup_field = "session_ref_number"
     serializer_class = SubjectSessionSerializer
     permission_classes = [IsAuthenticated]
@@ -36,7 +36,7 @@ class SubjectSessionViewset(viewsets.ModelViewSet):
 
 
 class CourseSessionViewset(viewsets.ModelViewSet):
-    queryset = CourseExamSession.objects.all()
+    queryset = CourseExamSession.objects.filter(is_active=True)
     lookup_field = "session_ref_number"
     serializer_class = CourseSessionSerializer
     permission_classes = [IsAuthenticated]
@@ -139,7 +139,6 @@ class SessionRegister(views.APIView):
             return Response(request.data, status=status.HTTP_201_CREATED)               
 
 
-            
 
 
 

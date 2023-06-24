@@ -2,8 +2,10 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from questions.api.serializers import QuestionSerializer
 from questions.models import QuestionModel
-from exam_sessions.models import SubjectExamSession, CourseExamSession
+from exam_sessions.models import SubjectExamSession, CourseExamSession, ExamResults
 from questions.api.permissions import IsSubscribedInSession
+from rest_framework.exceptions import PermissionDenied
+
 
 
 class QuestionViewset(viewsets.ModelViewSet):
@@ -20,6 +22,14 @@ class QuestionViewset(viewsets.ModelViewSet):
         ref = self.kwargs['session_ref']
         questios_queryset = subject_exam = None
         try:
+            try:
+                
+                result = ExamResults.objects.get(student=self.request.user, session_ref_number=ref)
+                if result.is_finished:
+                    self.queryset = self.queryset.none()
+                    return super(QuestionViewset, self).get_queryset()
+            except:
+                pass
             if ref.startswith('sub'):
                 subject_exam = SubjectExamSession.objects.get(session_ref_number=ref)
                 self.queryset = subject_exam.questions.all()
@@ -29,7 +39,7 @@ class QuestionViewset(viewsets.ModelViewSet):
             else:
                 self.queryset = self.queryset.none()
         except:
-            if not request.user.is_superuser:
+            if not self.request.user.is_superuser:
                 self.queryset = self.queryset.none()
                 
            

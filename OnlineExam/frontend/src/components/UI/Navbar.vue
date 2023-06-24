@@ -1,7 +1,8 @@
 <template>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light custom-nav">
+    <nav class="navbar navbar-expand-lg navbar-light custom-nav">
         <div class="container">
-            <span class="navbar-brand">Online Exam System</span>
+            <img src="/media/imgs/logo.png" class="logo img-logo" alt=""/>
+            <span class="navbar-brand nav-text-large">Exam System</span>
 
             <ul class="navbar-nav ml-auto">
                 <li v-if="page == 'Exam'" >
@@ -12,17 +13,17 @@
 
                 <li class="nav-item active">
                     <p>
-                        <span class="badge badge-light">{{ user["first_name"] }} {{ user['last_name'] }}</span>
+                        <span class="nav-text-small img-logo">{{ user["first_name"] }} {{ user['last_name'] }}</span>
                     </p>
                 </li>
                 <li v-if="page == 'Home' || page == 'Finish'" class="nav-item">
-                    <a class="btn btn-sm btn-danger"
+                    <a class="btn btn-warning"
                         href="/accounts/logout/"
                         tabindex="-1"
                         >Logout</a>
                 </li>
                 <li v-else-if="page == 'Exam'">
-                    <a class="btn btn-sm btn-danger"
+                    <a class="btn btn-warning"
                         tabindex="-1"
                         @click="$emit('click-quit')"
                         >Quit the Exam</a>
@@ -68,6 +69,23 @@ export default {
 
 <style scoped>
 .custom-nav {
+    background-color: #5bc1ac;
     border-bottom: 1px solid #ddd;
+}
+
+.nav-text-large {
+    color: white;
+    font-size: 25px;
+}
+
+.nav-text-small {
+    color: white;
+    font-size: 20px;
+}
+
+.img-logo {
+    padding-right: 10px;
+    height: 50px;
+    max-width: 100%;
 }
 </style>

@@ -1,41 +1,43 @@
 <template>
     <div class="home">
         <navbar-component page='Home'/>
-        <div class="container">
+        <div class="container backg" style="margin-top: 15px;">
+            
             <div v-if="ActiveSubSessions.length === 0  && ActiveCouSessions.length === 0">
                 <h2 class="text text-primary">You have no active exams!</h2>
             </div>
             <div v-else>
-                <h2>Your current exam session(s)</h2>
+                <h1>Your current exam sessions</h1>
                 <base-card
                     v-for="(session, ind) in ActiveSubSessions"
                     :key="ind"
-                    class="container"
+                    class="container exams"
                 >
-                    Exam name (click to start):
+                    Exam name (click to start)
                     <button
                         @click="startSession(session)"
                         class="btn btn-outline-success"
                     >
                         {{ session.session_name }}
                     </button>
-                    <p>Exam Description: {{ session.session_descriptions }}</p>
+                    <p v-if="session.session_descriptions != null">Exam Description: {{ session.session_descriptions }}</p>
                 </base-card>
                 <base-card
                     v-for="(session, ind) in ActiveCouSessions"
                     :key="ind"
-                    class="container"
-                >
-                    Exam name (click to start):
+                    class="container exams"
+                ><span class="fa fa-flag"></span>
+                    Exam name (click to start)
                     <button
                         @click="startSession(session)"
                         class="btn btn-outline-success"
                     >
                         {{ session.course_name }} Start Exam
                     </button>
-                    <p>Exam Description: {{ session.session_descriptions }}</p>
+                    <p v-if="session.session_descriptions != null">Exam Description: {{ session.session_descriptions }}</p>
                 </base-card>
             </div>
+            <!-- <img src="/media/imgs/logo_air.png" class="watermarked" alt="CAA" /> -->
         </div>
     </div>
 </template>
@@ -99,3 +101,21 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+.watermarked {
+    position: absolute;
+    max-width: 90%;
+    max-height: 90%;
+    top: 10%; /* or whatever */
+    left: 20%; /* or whatever, position according to taste */
+    opacity: 0.1; /* Firefox, Chrome, Safari, Opera, IE >= 9 (preview) */
+    filter:alpha(opacity=10); /* for <= IE 8 */
+    z-index: -1;
+}
+
+.exams {
+    font-size: 25px;
+}
+
+</style>
