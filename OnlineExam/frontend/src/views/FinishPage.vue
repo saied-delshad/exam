@@ -1,6 +1,6 @@
 <template>
 <div class="finish">
-    <navbar-component page="Finish" />
+    <navbar-component page="Finish" @check-remaining="CheckRemaining" />
     <div class="container">
         <base-card v-if="ExamNotFinished">
             <h3>Are you sure that you have finished and want to quit the exam?</h3>
@@ -63,6 +63,18 @@ export default {
 
         },
 
+        CheckRemaining() {
+            let endpoint = "api/results/" + this.SessionId + "/";
+            apiService(endpoint).then( data => {
+                if ( data['exam_remaining']<=0 ) {
+                    this.Quit();
+                }
+            }).catch(e => {
+            console.log(e);})
+            
+
+        },
+
         getResult() {
             let endpoint = "api/results/" + this.SessionId + "/";
             apiService(endpoint).then( data => {
@@ -77,6 +89,7 @@ export default {
 
     created() {
         this.SessionId = this.$route.params.SessionId;
+        this.CheckRemaining();
     },
     
 }

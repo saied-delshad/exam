@@ -1,5 +1,5 @@
 import requests
-
+import json
 
 URL = 'https://bpms.cao.ir/NetForm/Service/examresult/request'
 
@@ -14,4 +14,5 @@ def send_score(ref_code, nid, score, date, passed=0):
             "passed": passed
           }
     response = requests.post(URL, json=js, verify=False)
-    return response
+
+    return response.json()

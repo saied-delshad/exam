@@ -10,6 +10,16 @@ AdminSite.site_title = "Alireza"
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
     list_display = ['username', 'email', 'is_staff']
+    fieldsets = (
+        (None, {'fields': ('username', 'password')}),
+        (('Personal info'), {'fields': ('first_name', 'last_name', 'email', 'cell_phone',
+         'ATO', 'photo')}),
+        (('Permissions'), {
+            'fields': ('is_active', 'is_staff', 'is_superuser'),
+        }),
+        (('Important dates'), {'fields': ('last_login', 'date_joined')}),
+    )
+
 
 
 admin.site.register(CustomUser, CustomUserAdmin)

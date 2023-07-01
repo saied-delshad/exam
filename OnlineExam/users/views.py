@@ -1,3 +1,2 @@
-from django.shortcuts import render
-
-# Create your views here.
+from typing import Any, Optional
+from django.db import models

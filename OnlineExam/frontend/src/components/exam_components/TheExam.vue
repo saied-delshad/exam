@@ -63,8 +63,15 @@ import Question from "./Question.vue";
 import NavbarComponent from "../UI/Navbar.vue"
 import { apiService, patchAxios } from "../../common/api.service";
 import QuestionNavigator from './QuestionNavigator.vue';
+import { useCookies } from "vue3-cookies";
 
 export default {
+    setup() {
+        const { cookies } = useCookies();
+        return { cookies };
+    },
+
+
     components: {
         Question,
         QuestionNavigator,
@@ -79,7 +86,9 @@ export default {
             Answers: {},
             UserFinish: false,
             NavigateQ: false,
-            examDur: 0
+            examDur: 0,
+            remainingTime: null,
+            questionsQue: {}
         };
     },
     provide() {
@@ -89,6 +98,7 @@ export default {
     },
 
     methods: {
+
 
         answers() {
             const answers = [];
@@ -122,7 +132,9 @@ export default {
             if (newAnswer != null) {
                 identQ['givenAnswer'] = newAnswer;
                 this.Answers[identQ.question_ref_code] = newAnswer;
-                let data = {'answers':this.Answers};
+                
+                let data = {'answers':this.Answers, 'snapshot':this.questionsQue, 
+                                'exam_remaining':parseInt(this.remainingTime/1000)};
                 console.log(data);
                 let endpoint = "api/results/" + this.SessionId + '/';
                 patchAxios(endpoint, data).then( response => {
@@ -154,7 +166,7 @@ export default {
                 this.Questions[this.displayedQ].givenAnswer = null;
                 this.Questions[this.displayedQ].givenAnswer = null;
                 this.Answers[this.Questions[this.displayedQ].question_ref_code] = null;
-                let data = {'answers':this.Answers};
+                let data = {'answers':this.Answers, 'exam_remaining':parseInt(this.remainingTime/1000)};
                 console.log(data);
                 let endpoint = "api/results/" + this.SessionId + '/';
                 patchAxios(endpoint, data).then( response => {
@@ -177,7 +189,7 @@ export default {
                 console.log(data)
                 const midvar = [];
                 midvar.push(...data);
-                this.Questions = this.shuffleQuestions(JSON.parse(JSON.stringify(midvar)));
+                this.Questions = JSON.parse(JSON.stringify(midvar));
                 if (this.Questions.length == 0) {
                     this.$router.push({
                         name: "Home",
@@ -192,7 +204,11 @@ export default {
             let endpoint = 'api/results/' + this.SessionId +'/';
             apiService(endpoint).then((data) => {
                 if (data['exam_duration']) {
-                    this.examDur = data['exam_duration'];
+                    this.examDur = data['exam_duration']*60000;
+                    if (data['exam_remaining'] != null) {
+                        this.examDur = data['exam_remaining']*1000;
+                    }
+                    this.remainingTime = this.examDur;
                 }
                 if (data['answers'] != null && Object.keys(this.Questions).length >0 ){
                     this.Answers = data['answers'];
@@ -204,7 +220,10 @@ export default {
                         q['givenAnswer'] = this.Answers[key];
 
                     }
+                    
                 }
+                this.Questions = this.shuffleQuestions(this.Questions);
+                    
             })
         },
 
@@ -221,6 +240,7 @@ export default {
         },
 
         finishExam() {
+            this.cookies.remove('randomIndices');
             this.$router.push({
                     name: "FinishPage",
                     params: { SessionId: this.SessionId },
@@ -239,12 +259,36 @@ export default {
             let questions = qs;
             let loop = questions.length;
             let sorted_quests = [];
-            for (let i = 0; i < loop; i++) {
+            let random_index = [];
 
-                let randomIndex = Math.floor(Math.random() * questions.length)
-                sorted_quests.push(questions[randomIndex]);
-                questions.splice(randomIndex, 1)
+            if (this.cookies.isKey('randomIndices')) {
+                random_index = JSON.parse(this.cookies.get('randomIndices'));
+                for (let i = 0; i < loop; i++) {
+
+                    sorted_quests.push(questions[random_index[i]]);
+                    let num = i+1;
+                    this.questionsQue[num.toString()] = questions[random_index[i]].question_ref_code;
+                    questions.splice(random_index[i], 1);
+                }
+
             }
+            else {
+            
+                for (let i = 0; i < loop; i++) {
+
+                    let randomIndex = Math.floor(Math.random() * questions.length)
+                    let num = i+1
+                    sorted_quests.push(questions[randomIndex]);
+                    this.questionsQue[num.toString()] = questions[randomIndex].question_ref_code ;
+                    questions.splice(randomIndex, 1)
+                    random_index.push(randomIndex)
+                }
+
+                this.cookies.set('randomIndices', JSON.stringify(random_index))
+            }
+
+
+
 
             return sorted_quests
 
@@ -262,10 +306,34 @@ export default {
     created() {
         
         this.SessionId = this.$route.params.SessionId;
+        console.log(this.cookies.isKey('randomIndices'));
         this.getQuestions();
 
-    },
+        var checktime = setInterval(() => {
+            this.remainingTime = this.remainingTime - 1000;
+            if (this.remainingTime <= 0) {
 
+                let data = {'answers':this.Answers, 'exam_remaining':0 };
+                console.log(data);
+                let endpoint = "api/results/" + this.SessionId + '/';
+                patchAxios(endpoint, data).then( response => {
+                    console.log(response.data);
+                    clearInterval(checktime);
+                    }).catch(e => {
+                    console.log(e);
+                });
+                this.cookies.remove('randomIndices');
+                this.$router.push({
+                    name: "FinishPage",
+                    params: { SessionId: this.SessionId }
+                });
+
+            }
+        }, 1000);
+
+
+    },
+    
 };
 </script>
 

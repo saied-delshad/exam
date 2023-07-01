@@ -11,14 +11,14 @@ const routes = [
   },
   
   {
-    path: "/finish-:SessionId",
-    name: "FinishPage",
-    component: FinishPage,
-  },
-  {
     path: "/:SessionId",
     name: "Exam",
     component: TheExam,
+  },
+  {
+    path: "/finish-:SessionId",
+    name: "FinishPage",
+    component: FinishPage,
   },
 
  

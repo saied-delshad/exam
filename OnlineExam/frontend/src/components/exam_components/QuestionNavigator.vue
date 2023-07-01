@@ -125,7 +125,7 @@ td {
 }
 
 .n-answered {
-    background-color: gray;
+    background-color: #bfbfbf;
 }
 
 .marked {

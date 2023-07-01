@@ -49,6 +49,8 @@ urlpatterns = [
 
     path('api/rest-auth/registration/', 
         include('rest_auth.registration.urls')),
+
+    path('exam-sessions/', include('exam_sessions.urls')),
     
     re_path(r'^ckeditor/', include('ckeditor_uploader.urls')),
 

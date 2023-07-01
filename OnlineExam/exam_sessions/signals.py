@@ -1,4 +1,5 @@
 from django.db.models.signals import pre_save, post_save
+import json
 from django.dispatch import receiver
 from core.utils import generate_random_string
 from questions.models import QuestionModel
@@ -50,7 +51,6 @@ def select_course_exam_questions(sender, instance, created, **kwargs):
     """
     exam_subjects = instance.course_exam.course.subjects.all()
     per_subject_exam = instance.course_exam.exam_for_course.all()
-    instance.questions.clear()
     if instance.pk:
         for exam_subject in exam_subjects:
             noq = per_subject_exam.get(subject=exam_subject).noq_subject
@@ -84,28 +84,36 @@ def has_exam_finished(sender, instance, *args, **kwargs):
         session = instance.get_session()
         questions = session.questions.all()
         answers = instance.answers
+        sorting = instance.snapshot
         if answers == None:
             answers = {}
         correctly_answered_questions = []
         not_answered = {}
+        snap_shot = []
         instance.num_not_answered = 0
         wrong_answered = {}
         penalties = 0
         instance.num_wrong = 0
-        for question in session.questions.all():
+        for k, v in sorting.items():
+            print(k)
+            question = questions.get(question_ref_code = v)
             question.numb_of_appeared = question.numb_of_appeared + 1 
-            ref = question.question_ref_code
-            answer = answers.get(ref, None)
+            answer = answers.get(v, None)
             if answer == None:
-                not_answered.update({ref:''})
+                not_answered.update({v:''})
                 instance.num_not_answered += 1
             elif question.correct_answer-1 == answer:
-                correctly_answered_questions.append(ref)
+                correctly_answered_questions.append(v)
                 question.correctly_answered_times += 1
             else:
                 instance.num_wrong +=1
-                wrong_answered.update({ref:answer})
+                wrong_answered.update({v:answer})
+            snap_shot.append({'ref':v, 'body': question.question_content, 'A':question.opt_1,
+                              'B':question.opt_2, 'C':question.opt_3, 'D':question.opt_4, 'correct':question.correct_answer-1,
+                              'given': answer})
             question.save()
+        snap_shot_list = json.dumps(snap_shot)
+        instance.snapshot = json.dumps({'question_list': snap_shot_list})
         if session.has_penalty():
             penalties = len(wrong_answered)/session.penalized_for()
         score = 100*(len(correctly_answered_questions)-penalties)/questions.count()

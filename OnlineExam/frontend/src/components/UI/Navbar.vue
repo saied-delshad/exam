@@ -6,9 +6,9 @@
 
             <ul class="navbar-nav ml-auto">
                 <li v-if="page == 'Exam'" >
-                    <div v-if="duration > 0">
+                    <p v-if="duration > 0">
                         <exam-timer :exam_dur="duration" />
-                    </div>
+                    </p>
                 </li>
 
                 <li class="nav-item active">
@@ -45,6 +45,7 @@ export default {
         return {
             user: {},
             time: null
+            
         };
     },
 
