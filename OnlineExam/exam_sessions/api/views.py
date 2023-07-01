@@ -89,13 +89,23 @@ class SessionsViewset(generics.ListAPIView):
                 course_exam = CourseModel.objects.get(course_name = course_name).course_exam
             except:
                 course_exam = None
-            return list(itertools.chain(CourseExamSession.objects.filter(~Q(session_name__startswith='fx-free'),
+
+            course_exam_sessions = CourseExamSession.objects.filter(~Q(session_name__startswith='fx-free'),
                                                     is_active=True, exam_start__gt= datetime.now(),
-                                                    course_exam = course_exam),
+                                                    course_exam = course_exam)
+            for session in course_exam_sessions:
+                if session.remaining_seats()<=0:
+                    course_exam_sessions = course_exam_sessions.exclude(id = session.id)
+            return list(itertools.chain(course_exam_sessions,
                                         FreeExamSession.objects.filter(is_active=True, exam_start__gt= datetime.now())))
         else:
-            return list(itertools.chain(CourseExamSession.objects.filter(~Q(session_name__startswith='fx-free'),
-                                        is_active=True, exam_start__gt= datetime.now()),
+            course_exam_sessions = CourseExamSession.objects.filter(~Q(session_name__startswith='fx-free'),
+                                        is_active=True, exam_start__gt= datetime.now())
+            for session in course_exam_sessions:
+                if session.remaining_seats()<=0:
+                    course_exam_sessions = course_exam_sessions.exclude(id = session.id)
+            print(course_exam_sessions)
+            return list(itertools.chain(course_exam_sessions,
                                         FreeExamSession.objects.filter(is_active=True, exam_start__gt= datetime.now())))
     
     
@@ -112,7 +122,7 @@ class SessionRegister(views.APIView):
         applicant = CustomUser.get_or_create(username=applicant_nid, **request.data.get('applicant_data'))
         if session_ref_number.startswith('course_'):
             c_session = CourseExamSession.objects.get(session_ref_number=session_ref_number)
-            if not applicant in c_session.participants.all():
+            if not applicant in c_session.participants.all() and c_session.remaining_seats() > 0:
                 c_session.participants.add(applicant)
                 send_sms(applicant.cell_phone, applicant.get_full_name(), 
                          c_session.course_name(), c_session.exam_start)

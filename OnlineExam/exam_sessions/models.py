@@ -69,9 +69,13 @@ class CourseExamSession(AbstractExamSession):
 
     def remaining_seats(self):
         if self.course_exam_fsessions.count() == 0:
-            return self.session_total_seats - self.session_occupied_seats()
+            """
+            +1 for saving the instance in admin
+            """
+            return self.session_total_seats - self.session_occupied_seats() + 1
         else:
             return 1
+    
         
 
     def __str__(self):
