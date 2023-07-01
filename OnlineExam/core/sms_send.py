@@ -1,22 +1,26 @@
 import requests
+from pytz import timezone
 import json
 
 URL = 'https://new.payamsms.com/services/rest/index.php'
 
 
-def send_sms(applicant_cell, applicant_fullname, exam_name, exam_date):
+def send_sms(applicant_cell, applicant_fullname, exam_name, exam_date_time):
+
+    exam_date = exam_date_time.date().strftime("%d/%m/%Y")
+
+    exam_time = exam_date_time.astimezone(timezone('Asia/Tehran')).time().strftime('%H:%M')
 
     
-    raw_message= "Dear Applicant {0}, You have successfully registered in exam: {1}, Exam Date: {2}".format(applicant_fullname, exam_name, str(exam_date))
+    raw_message= """Dear Applicant {0}, You have successfully registered in exam: {1}, Exam Date: {2}, Exam Time:{3} Civil Aviation Authority of Islamic Republic of Iran""".format(applicant_fullname, exam_name, exam_date, exam_time)
 
-    print(raw_message)
     
     js = {
             "organization": "SHK",
             "username": "exam",
             "password": "753951",
             "method": "send",
-            "message":[
+            "messages":[
                 {
                     "sender": "98200097109",
                     "recipient": str(applicant_cell),

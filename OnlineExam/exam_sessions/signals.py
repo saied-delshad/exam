@@ -80,6 +80,10 @@ def set_timer(sender, instance, *args, **kwargs):
 
 @receiver(pre_save, sender=ExamResults)
 def has_exam_finished(sender, instance, *args, **kwargs):
+    """
+    This method calculates the score and save a snap shot of the exam taken for generating
+    transcript.
+    """
     if instance.is_finished and not instance.score:
         session = instance.get_session()
         questions = session.questions.all()
@@ -146,6 +150,9 @@ def has_exam_finished(sender, instance, *args, **kwargs):
 
 @receiver(post_save, sender=ExamResults) 
 def finish_send_score(sender, instance, created, **kwargs):
+    """
+    This method sends score to Netrise application.
+    """
     if instance.is_finished and instance.score:
         if instance.fsession_ref_number:
             ref_code = instance.fsession_ref_number

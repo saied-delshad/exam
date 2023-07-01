@@ -14,6 +14,7 @@ from exam_sessions.api.serializers import (SubjectSessionSerializer, CourseSessi
                                            ExamResultSerializer, ExamResultWriteSerializer, FreeSessionSerializer)
 from exam_sessions.models import SubjectExamSession, CourseExamSession, FreeExamSession, ExamResults
 from questions.models import CourseModel
+from core.sms_send import send_sms
 
 
 class SubjectSessionViewset(viewsets.ModelViewSet):
@@ -113,6 +114,8 @@ class SessionRegister(views.APIView):
             c_session = CourseExamSession.objects.get(session_ref_number=session_ref_number)
             if not applicant in c_session.participants.all():
                 c_session.participants.add(applicant)
+                send_sms(applicant.cell_phone, applicant.get_full_name(), 
+                         c_session.course_name(), c_session.exam_start)
                 return Response(request.data, status=status.HTTP_201_CREATED)
             return Response(request.data, status=status.HTTP_400_BAD_REQUEST)
         elif session_ref_number.startswith('free_'):
@@ -132,6 +135,8 @@ class SessionRegister(views.APIView):
                                                                            show_score=f_exam.show_score, 
                                                                            session_total_seats =f_exam.session_total_seats)
                 course_exam_session.participants.add(applicant)
+                send_sms(applicant.cell_phone, applicant.get_full_name(), 
+                         course_exam_session.course_name(), course_exam_session.exam_start)
                 f_exam.increment_occupied()
                 f_exam.course_sessions.add(course_exam_session)
             else:

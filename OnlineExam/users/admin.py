@@ -9,7 +9,7 @@ AdminSite.site_title = "Alireza"
 
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
-    list_display = ['username', 'email', 'is_staff']
+    list_display = ['username', 'cell_phone', 'email', 'is_staff']
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         (('Personal info'), {'fields': ('first_name', 'last_name', 'email', 'cell_phone',
