@@ -49,13 +49,13 @@ def select_course_exam_questions(sender, instance, created, **kwargs):
     Number of questions (noq) is determined for each subject in Course Exam Model.
     The questions are re-selected after each save.
     """
+    instance.questions.clear()
     exam_subjects = instance.course_exam.course.subjects.all()
     per_subject_exam = instance.course_exam.exam_for_course.all()
     if instance.pk:
         for exam_subject in exam_subjects:
             noq = per_subject_exam.get(subject=exam_subject).noq_subject
             questions = exam_subject.sub_questions.order_by('?')[:noq]
-            print(questions)
             instance.questions.add(*questions)
 
 
@@ -99,7 +99,6 @@ def has_exam_finished(sender, instance, *args, **kwargs):
         penalties = 0
         instance.num_wrong = 0
         for k, v in sorting.items():
-            print(k)
             question = questions.get(question_ref_code = v)
             question.numb_of_appeared = question.numb_of_appeared + 1 
             answer = answers.get(v, None)

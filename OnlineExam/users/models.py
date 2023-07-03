@@ -9,7 +9,7 @@ def file_size(value): # add this to some file where you can import it from
 
 def user_directory_path(instance, filename):
     # file will be uploaded to MEDIA_ROOT / user_<username>/<filename>
-    return 'media/user_profile/{0}'.format(instance.user.username)
+    return 'user_profile/{0}'.format(instance.username)
 
 
 class CustomUser(AbstractUser):

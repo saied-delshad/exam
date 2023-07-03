@@ -8,13 +8,17 @@ class CourseExamSessionAdmin(admin.ModelAdmin):
     # pass
     exclude = ['questions']
     filter_horizontal = ('participants',)
-    list_display=["session_name", 'course_exam', "exam_start", "show_participantes"]
+    list_display=["session_name", 'course_exam', "exam_start", "show_participantes", 'seats_occupied']
 
 
     def show_participantes(self, obj):
-        return format_html('<a  href="/exam-sessions/participants/{0}" target="_blank">list participanrs</a>&nbsp;', obj.id )
+        return format_html('<a  href="/exam-sessions/participants/{0}" target="_blank">list participants</a>&nbsp;', obj.id )
     show_participantes.short_description = 'List Participants'
     show_participantes.allow_tags = True
+
+
+    def seats_occupied(sel, obj):
+        return obj.session_occupied_seats()
 
 @admin.register(SubjectExamSession)
 class SubjectExamSessionAdmin(admin.ModelAdmin):

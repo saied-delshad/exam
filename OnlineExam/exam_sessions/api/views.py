@@ -15,10 +15,11 @@ from exam_sessions.api.serializers import (SubjectSessionSerializer, CourseSessi
 from exam_sessions.models import SubjectExamSession, CourseExamSession, FreeExamSession, ExamResults
 from questions.models import CourseModel
 from core.sms_send import send_sms
+from core.image_upload import photo
 
 
 class SubjectSessionViewset(viewsets.ModelViewSet):
-    queryset = SubjectExamSession.objects.filter(is_active=True)
+    queryset = SubjectExamSession.objects.filter(started=True)
     lookup_field = "session_ref_number"
     serializer_class = SubjectSessionSerializer
     permission_classes = [IsAuthenticated]
@@ -27,7 +28,7 @@ class SubjectSessionViewset(viewsets.ModelViewSet):
         taken_exams = ExamResults.objects.filter(student = self.request.user)
         if self.request.user.is_authenticated:
             # self.queryset = self.queryset.filter(participants__in=self.request.user.groups.all())
-            self.queryset = self.request.user.subject_exams.all()
+            self.queryset = self.request.user.subject_exams.filter(started=True)
         if taken_exams:
             for item in taken_exams:
                self.queryset =  self.queryset.exclude(session_ref_number = item.session_ref_number)
@@ -37,7 +38,7 @@ class SubjectSessionViewset(viewsets.ModelViewSet):
 
 
 class CourseSessionViewset(viewsets.ModelViewSet):
-    queryset = CourseExamSession.objects.filter(is_active=True)
+    queryset = CourseExamSession.objects.filter(started=True)
     lookup_field = "session_ref_number"
     serializer_class = CourseSessionSerializer
     permission_classes = [IsAuthenticated]
@@ -46,7 +47,7 @@ class CourseSessionViewset(viewsets.ModelViewSet):
         taken_exams = ExamResults.objects.filter(student = self.request.user)
         if self.request.user.is_authenticated:
             # self.queryset = self.queryset.filter(participants__in=self.request.user.groups.all())
-            self.queryset = self.request.user.course_exams.all()
+            self.queryset = self.request.user.course_exams.filter(started=True)
         if taken_exams:
             for item in taken_exams:
                self.queryset =  self.queryset.exclude(session_ref_number = item.session_ref_number)
@@ -119,7 +120,13 @@ class SessionRegister(views.APIView):
 
         applicant_nid = request.data.get('nid')
         session_ref_number = request.data.get('session_ref_code')
-        applicant = CustomUser.get_or_create(username=applicant_nid, **request.data.get('applicant_data'))
+        app_data = request.data.get('applicant_data')
+        photo_data = app_data.pop('photo')
+
+        applicant = CustomUser.get_or_create(username=applicant_nid, **app_data)
+        if not applicant.photo:
+            photo_file = photo(photo_data, applicant_nid)
+            applicant.photo.save(photo_file[0], photo_file[1], save=True)
         if session_ref_number.startswith('course_'):
             c_session = CourseExamSession.objects.get(session_ref_number=session_ref_number)
             if not applicant in c_session.participants.all() and c_session.remaining_seats() > 0:

@@ -6,7 +6,7 @@ from django.db.models import JSONField
 
 class AbstractExamSession(models.Model):
     session_name = models.CharField(
-        "Session name", max_length=20, default="New Session")
+        "Session name", max_length=50, default="New Session")
 
     session_descriptions = models.CharField(
         "Session descriptions", max_length=150, default="Description")
@@ -20,6 +20,9 @@ class AbstractExamSession(models.Model):
         "Show scores at the end to the applicant?", default=False)
     questions = models.ManyToManyField(QuestionModel)
     is_active = models.BooleanField("Is active session?", default=True)
+
+    started = models.BooleanField("Start the exam", default = False)
+
     session_total_seats = models.PositiveIntegerField("Total number of seats", blank = True,
                                                       null = True)
     session_occupied_seats = models.PositiveIntegerField("Number of occupied seats", blank = True,
@@ -49,7 +52,7 @@ class CourseExamSession(AbstractExamSession):
     course_exam = models.ForeignKey(
         CourseExamModel, on_delete=models.CASCADE, related_name="sessions_course_exams")
     participants = models.ManyToManyField(CustomUser, verbose_name="Exam participant",
-                                          related_name="course_exams")
+                                          related_name="course_exams", blank=True)
     
 
     def course_name(self):
@@ -72,7 +75,7 @@ class CourseExamSession(AbstractExamSession):
             """
             +1 for saving the instance in admin
             """
-            return self.session_total_seats - self.session_occupied_seats() + 1
+            return self.session_total_seats - self.session_occupied_seats()
         else:
             return 1
     
@@ -86,7 +89,7 @@ class SubjectExamSession(AbstractExamSession):
     subject_exam = models.ForeignKey(
         SubjectExamModel, on_delete=models.CASCADE, related_name="sub_exam_sessions")
     participants = models.ManyToManyField(CustomUser, verbose_name="Exam participant",
-                                          related_name="subject_exams")
+                                          related_name="subject_exams", blank=True)
 
     def __str__(self):
         return self.subject_exam.exam_name + '-' + self.session_ref_number
