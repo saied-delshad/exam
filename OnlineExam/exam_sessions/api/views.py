@@ -121,10 +121,10 @@ class SessionRegister(views.APIView):
         applicant_nid = request.data.get('nid')
         session_ref_number = request.data.get('session_ref_code')
         app_data = request.data.get('applicant_data')
-        photo_data = app_data.pop('photo')
+        photo_data = app_data.pop('photo', None)
 
         applicant = CustomUser.get_or_create(username=applicant_nid, **app_data)
-        if not applicant.photo:
+        if photo_data and not applicant.photo:
             photo_file = photo(photo_data, applicant_nid)
             applicant.photo.save(photo_file[0], photo_file[1], save=True)
         if session_ref_number.startswith('course_'):
