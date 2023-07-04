@@ -8,8 +8,9 @@ def file_size(value): # add this to some file where you can import it from
         raise ValidationError('File too large. Size should not exceed 1.5 MiB.')
 
 def user_directory_path(instance, filename):
+    ext = filename.split('.')[-1]
     # file will be uploaded to MEDIA_ROOT / user_<username>/<filename>
-    return 'user_profile/{0}'.format(instance.username)
+    return 'user_profile/{}.{}'.format(instance.username, ext)
 
 
 class CustomUser(AbstractUser):

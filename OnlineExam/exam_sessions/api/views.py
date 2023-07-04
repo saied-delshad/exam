@@ -128,7 +128,11 @@ class SessionRegister(views.APIView):
             photo_file = photo(photo_data, applicant_nid)
             applicant.photo.save(photo_file[0], photo_file[1], save=True)
         if session_ref_number.startswith('course_'):
-            c_session = CourseExamSession.objects.get(session_ref_number=session_ref_number)
+            try:
+                c_session = CourseExamSession.objects.get(session_ref_number=session_ref_number)
+            except:
+                result = {'message':'Session Not Found!'}
+                return Response(result, status=status.HTTP_400_BAD_REQUEST)
             if not applicant in c_session.participants.all() and c_session.remaining_seats() > 0:
                 c_session.participants.add(applicant)
                 send_sms(applicant.cell_phone, applicant.get_full_name(), 
@@ -157,7 +161,8 @@ class SessionRegister(views.APIView):
                 f_exam.increment_occupied()
                 f_exam.course_sessions.add(course_exam_session)
             else:
-                return Response(request.data, status=status.HTTP_400_BAD_REQUEST)
+                result = {'message': 'Session Not Found!'}
+                return Response(result, status=status.HTTP_400_BAD_REQUEST)
             return Response(request.data, status=status.HTTP_201_CREATED)               
 
 

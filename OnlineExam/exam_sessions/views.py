@@ -60,3 +60,24 @@ def list_participants(request, pk):
             context
         )
 
+
+
+def start_session(request, pk):
+    exam_session = CourseExamSession.objects.get(id=pk)
+    if exam_session.started:
+        exam_session.started = False
+        exam_session.save()
+    else:
+        exam_session.started = True
+        exam_session.save()
+    return redirect('/admin/exam_sessions/courseexamsession/')
+
+def register_status(request, pk):
+    exam_session = CourseExamSession.objects.get(id=pk)
+    if exam_session.is_active:
+        exam_session.is_active = False
+        exam_session.save()
+    else:
+        exam_session.is_active = True
+        exam_session.save()
+    return redirect('/admin/exam_sessions/courseexamsession/')

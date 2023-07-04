@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% load static %}
+{% get_media_prefix as MEDIA_URL %}
 
 {% block content %}
 
@@ -23,6 +25,7 @@
 <h1> {{ session_name }} </h1>
 <table>
     <tr>
+        <th> Photo </th>
         <th> Name </th>
         <th> National Code </th>
         <th> Phone </th>
@@ -32,13 +35,16 @@
     {% for student in students %}
     <tr>
         <td>
+            <img src='{{ MEDIA_URL }}{{ student.photo }}' />
+        </td>
+        <td>
             {{ student.get_full_name }}
         </td>
         <td>
             {{ student.username }}
         </td>
         <td>
-            {{ student.email }}
+            {{ student.cell_phone }}
         </td>
     </tr>
     {%  endfor %}

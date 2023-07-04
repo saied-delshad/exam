@@ -8,7 +8,8 @@ class CourseExamSessionAdmin(admin.ModelAdmin):
     # pass
     exclude = ['questions']
     filter_horizontal = ('participants',)
-    list_display=["session_name", 'course_exam', "exam_start", "show_participantes", 'seats_occupied']
+    list_display=["session_name", 'course_exam', "exam_start", "show_participantes", 'seats_occupied', 'start_session',
+                  'register_status']
 
 
     def show_participantes(self, obj):
@@ -19,6 +20,22 @@ class CourseExamSessionAdmin(admin.ModelAdmin):
 
     def seats_occupied(sel, obj):
         return obj.session_occupied_seats()
+    
+    def start_session(self, obj):
+        if obj.started:
+            return format_html('<a  href="/exam-sessions/session-start/{0}" style="color:red;">STOP</a>&nbsp;', obj.id )
+        else:
+            return format_html('<a  href="/exam-sessions/session-start/{0}" style="color:green;">START</a>&nbsp;', obj.id )
+    start_session.short_description = 'Start/Stop Session'
+    start_session.allow_tags = True
+
+    def register_status(self, obj):
+        if obj.is_active:
+            return format_html('<a  href="/exam-sessions/register-status/{0}" style="color:red;">Close Registeration</a>&nbsp;', obj.id )
+        else:
+            return format_html('<a  href="/exam-sessions/register-status/{0}" style="color:green;">Open Registeration</a>&nbsp;', obj.id )
+    register_status.short_description = 'Register Open/Close'
+    register_status.allow_tags = True
 
 @admin.register(SubjectExamSession)
 class SubjectExamSessionAdmin(admin.ModelAdmin):
