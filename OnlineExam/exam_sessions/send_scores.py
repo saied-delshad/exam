@@ -28,7 +28,7 @@ def send_score(ref_code, nid, score, date, passed=0):
             "passed": passed
           }
     sess = requests.session()
-    adp = TlsAdapter(ssl.OP_NO_TLSv1_3 | ssl.OP_NO_TLSv1_3)
+    adp = TlsAdapter(ssl.OP_NO_TLSv1_1 | ssl.OP_NO_TLSv1_2)
     sess.mount(URL, adp)
     response=sess.post(URL, json=js)
 
