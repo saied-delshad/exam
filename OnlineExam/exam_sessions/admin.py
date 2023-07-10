@@ -50,7 +50,7 @@ class FreeExamSessionAdmin(admin.ModelAdmin):
 
 @admin.register(ExamResults)
 class ResultsExamAdmin(admin.ModelAdmin):
-    list_display = ['student', 'created_at', 'is_finished', 'score', 'show_transcript', 'send_score']
+    list_display = ['student', 'created_at', 'is_finished', 'score', 'show_transcript', 'send_score', 'course']
 
     def show_transcript(self, obj):
         return format_html('<a  href="/exam-sessions/transcript/{0}" target="_blank">show transcript</a>&nbsp;', obj.id )
@@ -62,3 +62,8 @@ class ResultsExamAdmin(admin.ModelAdmin):
         return format_html('<a  href="/exam-sessions/score-send/{0}" >send score</a>&nbsp;', obj.id )
     send_score.short_description = 'Send Score to PEL'
     send_score.allow_tags = True
+
+
+    def course(self, obj):
+        return obj.get_session().session_name
+    course.short_description = 'Session name'
