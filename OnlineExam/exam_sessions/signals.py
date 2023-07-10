@@ -164,7 +164,12 @@ def finish_send_score(sender, instance, created, **kwargs):
         date = d_date + ' ' + t_date
         passed = str(int(instance.is_passed))
         try:
-            send_score(ref_code, nid, score, date, passed=passed)
+            course_name = instance.get_session().get_course().course_name
+            if course_name == 'IR(A)' or course_name == 'IR(H)':
+                URL = 'https://bpms.cao.ir/NetForm/Service/irexamresult/request'
+            else:
+                URL = 'https://bpms.cao.ir/NetForm/Service/examresult/request'
+            send_score( ref_code, nid, score, date, passed=passed, url=URL)
         except:
             pass
         

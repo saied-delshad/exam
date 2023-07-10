@@ -31,12 +31,21 @@ def sending_score(request, pk):
             d_date = str(result.get_session().exam_start.date())
             t_date = str(result.get_session().exam_start.time())
             date = d_date + ' ' + t_date
+            try:
+                course_name = result.get_session().get_course().course_name
+                if course_name == 'IR(A)' or course_name=='IR(H)':
+                    URL = 'https://bpms.cao.ir/NetForm/Service/irexamresult/request'
+                else:
+                    URL = 'https://bpms.cao.ir/NetForm/Service/examresult/request'
+
+            except:
+                URL = 'https://bpms.cao.ir/NetForm/Service/examresult/request'
 
             response = send_score(result.session_ref_number, 
                     result.student.username, 
                     str(result.score), 
                     date, 
-                    passed = str(int(result.is_passed)))
+                    passed = str(int(result.is_passed)), url=URL)
             print(response)
             if response['result']:
                 messages.add_message(request, messages.INFO, response['message'])

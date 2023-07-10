@@ -15,10 +15,8 @@ class TlsAdapter(HTTPAdapter):
     ctx = ssl_.create_urllib3_context(cert_reqs=ssl.CERT_REQUIRED, options=self.ssl_options)
     self.poolmanager = PoolManager(*pool_args, ssl_context=ctx, **pool_kwargs)
 
-URL = 'https://bpms.cao.ir/NetForm/Service/irexamresult/request'
 
-
-def send_score(ref_code, nid, score, date, passed=0):
+def send_score(ref_code, nid, score, date, passed=0, url=None):
 
     js = {
             "course": ref_code,
@@ -29,7 +27,7 @@ def send_score(ref_code, nid, score, date, passed=0):
           }
     sess = requests.session()
     adp = TlsAdapter(ssl.OP_NO_TLSv1_1 | ssl.OP_NO_TLSv1_2)
-    sess.mount(URL, adp)
-    response=sess.post(URL, json=js)
+    sess.mount(url, adp)
+    response=sess.post(url, json=js)
 
     return response.json()
