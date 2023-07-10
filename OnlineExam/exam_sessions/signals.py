@@ -169,9 +169,11 @@ def finish_send_score(sender, instance, created, **kwargs):
                 URL = 'https://bpms.cao.ir/NetForm/Service/irexamresult/request'
             else:
                 URL = 'https://bpms.cao.ir/NetForm/Service/examresult/request'
-            send_score( ref_code, nid, score, date, passed=passed, url=URL)
+            
         except:
-            pass
+            URL = 'https://bpms.cao.ir/NetForm/Service/examresult/request'
+
+        send_score(ref_code, nid, score, date, passed=passed, url=URL)
         
             
         
