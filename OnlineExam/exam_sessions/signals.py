@@ -86,7 +86,7 @@ def has_exam_finished(sender, instance, *args, **kwargs):
     This method calculates the score and save a snap shot of the exam taken for generating
     transcript.
     """
-    if instance.is_finished and not instance.score:
+    if instance.is_finished and instance.score == None:
         session = instance.get_session()
         questions = session.questions.all()
         answers = instance.answers
@@ -154,7 +154,7 @@ def finish_send_score(sender, instance, created, **kwargs):
     """
     This method sends score to Netrise application.
     """
-    if instance.is_finished and instance.score:
+    if instance.is_finished and instance.score != None:
         if instance.fsession_ref_number:
             ref_code = instance.fsession_ref_number
         else:
@@ -166,7 +166,7 @@ def finish_send_score(sender, instance, created, **kwargs):
         date = d_date + ' ' + t_date
         passed = str(int(instance.is_passed))
         try:
-            course_name = instance.get_session().get_course().course_name
+            course_name = instance.get_session().get_course()
             if course_name == 'IR(A)' or course_name == 'IR(H)':
                 URL = 'https://bpms.cao.ir/NetForm/Service/irexamresult/request'
             else:

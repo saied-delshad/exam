@@ -32,7 +32,7 @@ def sending_score(request, pk):
             t_date = str(result.get_session().exam_start.time())
             date = d_date + ' ' + t_date
             try:
-                course_name = result.get_session().get_course().course_name
+                course_name = result.get_session().get_course()
                 if course_name == 'IR(A)' or course_name=='IR(H)':
                     URL = 'https://bpms.cao.ir/NetForm/Service/irexamresult/request'
                 else:
