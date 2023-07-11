@@ -76,6 +76,8 @@ def select_questions(sender, instance, created, **kwargs):
 def set_timer(sender, instance, *args, **kwargs):
     if not instance.exam_duration:
         instance.exam_duration = instance.get_exam_time()
+    if instance._state.adding:
+        instance.exam_remaining = instance.exam_duration * 60
 
 
 @receiver(pre_save, sender=ExamResults)
@@ -169,11 +171,12 @@ def finish_send_score(sender, instance, created, **kwargs):
                 URL = 'https://bpms.cao.ir/NetForm/Service/irexamresult/request'
             else:
                 URL = 'https://bpms.cao.ir/NetForm/Service/examresult/request'
+            send_score(ref_code, nid, score, date, passed=passed, url=URL)
             
         except:
-            URL = 'https://bpms.cao.ir/NetForm/Service/examresult/request'
+            pass
 
-        send_score(ref_code, nid, score, date, passed=passed, url=URL)
+        
         
             
         

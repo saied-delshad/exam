@@ -6,7 +6,7 @@
     <img src="/media/imgs/logo_air.png" style="height:300px;" alt=""/>
     <h1>Login</h1>
     <div class="login-form-container">
-        <form method="POST">
+        <form method="POST" autocomplete="off">
             {% csrf_token %}
             {{ form|crispy }}
             <button type="submit" class="btn btn-sm btn-outline-primary">Login</button>

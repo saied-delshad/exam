@@ -5,7 +5,7 @@ from users.models import CustomUser
 from django.contrib.admin.sites import AdminSite
 
 
-AdminSite.site_title = "Alireza"
+AdminSite.site_title = "CAA.IRI"
 
 class CustomUserAdmin(UserAdmin):
     model = CustomUser
@@ -15,7 +15,7 @@ class CustomUserAdmin(UserAdmin):
         (('Personal info'), {'fields': ('first_name', 'last_name', 'email', 'cell_phone',
          'ATO', 'photo')}),
         (('Permissions'), {
-            'fields': ('is_active', 'is_staff', 'is_superuser'),
+            'fields': ('is_active', 'is_staff', 'is_superuser','user_permissions'),
         }),
         (('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
