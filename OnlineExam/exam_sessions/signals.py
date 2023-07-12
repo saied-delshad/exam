@@ -101,6 +101,7 @@ def has_exam_finished(sender, instance, *args, **kwargs):
         penalties = 0
         instance.num_wrong = 0
         for k, v in sorting.items():
+            print(v)
             question = questions.get(question_ref_code = v)
             question.numb_of_appeared = question.numb_of_appeared + 1 
             answer = answers.get(v, None)
