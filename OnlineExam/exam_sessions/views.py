@@ -16,7 +16,7 @@ class ResultDetailView(DetailView):
     context_object_name = 'result'
 
     def get(self, request, *args, **kwargs):
-        if not request.user.is_staff or not request.user.is_superuser:
+        if not (request.user.is_staff or request.user.is_superuser):
             return HttpResponseForbidden
         return super(ResultDetailView, self).get(request, *args, **kwargs)
 
