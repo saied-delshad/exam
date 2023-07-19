@@ -1,15 +1,46 @@
+from typing import Any, List, Tuple
 from django.contrib import admin
 from exam_sessions.models import CourseExamSession, SubjectExamSession, FreeExamSession, ExamResults
 from django.utils.html import format_html
-from exam_sessions.send_scores import send_score
+from datetime import datetime
+
+
+
+class CurrentExamsFilter(admin.SimpleListFilter):
+    title = ("Show current exams")
+    parameter_name = "currents"
+
+    def lookups(self, request, model_admin):
+        
+        return [
+        ("Currents", "Current Exams"),
+        ("Pasts", "Past Exams"),
+        ]
+    
+    def queryset(self, request, queryset):
+
+        if self.value() == "Currents":
+            return queryset.filter(
+                exam_start__gte=datetime.now()
+            )
+        if self.value() == "Pasts":
+            return queryset.filter(
+                exam_start__lt=datetime.now(),
+                )
 
 @admin.register(CourseExamSession)
 class CourseExamSessionAdmin(admin.ModelAdmin):
-    # pass
     exclude = ['questions']
     filter_horizontal = ('participants',)
     list_display=["session_name", 'course_exam', "exam_start", "show_participantes", 'seats_occupied', 'start_session',
                   'register_status']
+    list_filter = ['course_exam', CurrentExamsFilter]
+    search_fields = ['session_name', 'exam_start', "show_participantes", 'seats_occupied']
+
+    def changelist_view(self, request, extra_context=None):
+        if not (request.user.is_superuser or request.user.username=='exam_admin'):
+            self.list_display = ['session_name', 'course_exam', "exam_start", "show_participantes"]
+        return super(CourseExamSessionAdmin, self).changelist_view(request, extra_context)
 
 
     def show_participantes(self, obj):
@@ -23,19 +54,22 @@ class CourseExamSessionAdmin(admin.ModelAdmin):
     
     def start_session(self, obj):
         if obj.started:
-            return format_html('<a  href="/exam-sessions/session-start/{0}" style="color:red;">STOP</a>&nbsp;', obj.id )
+            return format_html('<a  href="/exam-sessions/session-start/{0}" style="color:red;"><img src="{1}" alt="stop" style="height:30px;"/></a>&nbsp;', obj.id, '/media/imgs/stop.jpg')
         else:
-            return format_html('<a  href="/exam-sessions/session-start/{0}" style="color:green;">START</a>&nbsp;', obj.id )
+            return format_html('<a  href="/exam-sessions/session-start/{0}" style="color:green;"><img src="{1}" alt="play" style="height:30px;"/></a>&nbsp;', obj.id, '/media/imgs/play.jpg' )
     start_session.short_description = 'Start/Stop Session'
     start_session.allow_tags = True
 
     def register_status(self, obj):
         if obj.is_active:
-            return format_html('<a  href="/exam-sessions/register-status/{0}" style="color:red;">Close Registeration</a>&nbsp;', obj.id )
+            return format_html('<a  href="/exam-sessions/register-status/{0}" style="color:red;"><img src="{1}" alt="close" style="height:50px;"/></a>&nbsp;', obj.id, '/media/imgs/open.jpg' )
         else:
-            return format_html('<a  href="/exam-sessions/register-status/{0}" style="color:green;">Open Registeration</a>&nbsp;', obj.id )
+            return format_html('<a  href="/exam-sessions/register-status/{0}" style="color:green;"><img src="{1}" alt="open" style="height:50px;"/></a>&nbsp;', obj.id, '/media/imgs/closed.jpg' )
     register_status.short_description = 'Register Open/Close'
     register_status.allow_tags = True
+
+
+
 
 @admin.register(SubjectExamSession)
 class SubjectExamSessionAdmin(admin.ModelAdmin):

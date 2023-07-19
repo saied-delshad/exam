@@ -307,29 +307,31 @@ export default {
         
         this.SessionId = this.$route.params.SessionId;
         console.log(this.cookies.isKey('randomIndices'));
-        this.getQuestions();
+        this.getQuestions()
+        .then(setInterval(() => {
+            if (this.remainingTime != null) {
+                this.remainingTime = this.remainingTime - 1000;
+                if (this.remainingTime <= 0) {
 
-        var checktime = setInterval(() => {
-            this.remainingTime = this.remainingTime - 1000;
-            if (this.remainingTime <= 0) {
+                    let data = {'answers':this.Answers, 'exam_remaining':0 };
+                    console.log(data);
+                    let endpoint = "api/results/" + this.SessionId + '/';
+                    patchAxios(endpoint, data).then( response => {
+                        console.log(response.data);
+                        this.remainingTime = null;
+                        }).catch(e => {
+                        console.log(e);
+                    });
+                    this.cookies.remove('randomIndices');
+                    this.$router.push({
+                        name: "FinishPage",
+                        params: { SessionId: this.SessionId }
+                    });
 
-                let data = {'answers':this.Answers, 'exam_remaining':0 };
-                console.log(data);
-                let endpoint = "api/results/" + this.SessionId + '/';
-                patchAxios(endpoint, data).then( response => {
-                    console.log(response.data);
-                    clearInterval(checktime);
-                    }).catch(e => {
-                    console.log(e);
-                });
-                this.cookies.remove('randomIndices');
-                this.$router.push({
-                    name: "FinishPage",
-                    params: { SessionId: this.SessionId }
-                });
-
+                }
             }
-        }, 1000);
+            
+        }, 1000))
 
 
     },

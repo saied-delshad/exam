@@ -1,14 +1,11 @@
 
-import os
+import json
 from django.views.generic import DetailView
-from django.conf import settings
 from exam_sessions.models import ExamResults, CourseExamSession
 from django.http import HttpResponseForbidden
 from exam_sessions.send_scores import send_score
 from django.shortcuts import redirect
 from django.contrib import messages
-from django.http import HttpResponseRedirect, HttpResponse
-from django.template.loader import get_template
 from exam_sessions.html_to_pdf import render_to_pdf
 
 
@@ -17,6 +14,27 @@ class ResultDetailView(DetailView):
 
     model = ExamResults
     context_object_name = 'result'
+
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_staff or not request.user.is_superuser:
+            return HttpResponseForbidden
+        return super(ResultDetailView, self).get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        snapshot = json.loads(context['result'].snapshot)
+        q_list = snapshot['question_list']
+        questions = json.loads(q_list)
+        context["questions"] = questions
+        context['session'] = context['result'].get_session()
+        return context
+    
+    # def render_to_response(self, context, **response_kwargs):
+    #     template = 'exam_sessions/examresults_detail.html'
+    #     return render_to_pdf(
+    #         template,
+    #         context
+    #     )
 
 
 

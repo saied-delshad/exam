@@ -54,9 +54,7 @@ export default {
     methods: {
         getUserData() {
             let endpoint = "api/rest-auth/user/";
-            console.log(endpoint);
             apiService(endpoint).then((data) => {
-                console.log(data);
                 this.user = JSON.parse(JSON.stringify(data));
             });
         },

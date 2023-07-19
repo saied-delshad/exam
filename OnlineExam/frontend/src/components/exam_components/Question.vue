@@ -6,7 +6,7 @@
     <form @submit.prevent="submitData">
       <div class="form-group">
         <div class="form-control">
-          <h4 v-html=rectifiedQ(questionNo,question)></h4>
+          <h4 v-html=rectifiedQ(questionNo,question) align="justify" class="q-style"></h4>
         </div>
         <div v-for="(answer, ind) in answers" :key="ind" class="form-check">
           <input v-if="answer != null" :id="id + ind" :name="id+ ind" :value="ind" type="radio" class="form-check-input" v-model="yourAnswer" />
@@ -144,5 +144,10 @@ textarea:focus {
 
 .form-control {
   margin: 1rem 0;
+}
+
+.q-style {
+  color: black;
+
 }
 </style>

@@ -1,6 +1,93 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>{{ result.student.get_full_name }}</h1>
+
+<style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+      text-align: center;
+    }
+
+    
+</style>
+
+<div class='container'>
+    <img src="/media/imgs/logo_air.png" style="height:200px;" alt=""/>
+    <table>
+        <tr>
+            <td><h5> Applicant Name: {{ result.student.get_full_name }}</h5></td>
+            <td><h5> Session: {{ session.session_name }} </h5></td>
+        </tr>
+        <tr>
+            <td><h5> Start Time: {{ session.exam_start }} </h5></td>
+            <td><h5> Score: {{ result.score }} </h5></td>
+        </tr>
+        <tr>
+            <td><h5> Wrong answers: {{ result.num_wrong }} </h5></td>
+            <td><h5> Not answered: {{ result.num_not_answered }} </h5></td>
+        </tr>
+
+    </table>
+        
+        
+    <table style="margin-top:15px;">
+        <tr>
+            <th> Question No.</th>
+            <th> Answer Status </th>
+            <th> Question </th>
+            <th> A </th>
+            <th> B </th>
+            <th> C </th>
+            <th> D </th>
+            <th> Correct Answer </th>
+            <th> Given Answer </th>
+        </tr>
+    {% for item in questions %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            {% if item.ref in result.wrong_answers %}
+                <td> <span class="badge badge-danger"><i class="fa fa-close"></i></span> </td>
+            {% elif item.ref in result.not_answered %}
+                <td> <span class="badge badge-warning"><i class="fa fa-circle-o"></i></span> </td>
+            {% else %}
+                <td> <span class="badge badge-success"><i class="fa fa-check"></i></span> </td>
+            {% endif %}
+
+            <td> {{ item.body|safe }} </td>
+            <td> {{ item.A|safe }}  </td>
+            <td> {{ item.B|safe }} </td>
+            <td> {{ item.C|safe }} </td>
+            <td> {{ item.D|safe }} </td>
+            {% if item.correct == 0 %}
+                <td>A</td>
+            {% elif item.correct == 1 %}
+                <td>B</td>
+            {% elif item.correct == 2 %}
+                <td>C</td>
+            {% elif item.correct == 3 %}
+                <td>D</td>
+            {% endif %}
+
+            {% if item.given == 0 %}
+                <td>A</td>
+            {% elif item.given == 1 %}
+                <td>B</td>
+            {% elif item.given == 2 %}
+                <td>C</td>
+            {% elif item.given == 3 %}
+                <td>D</td>
+            {% endif %}
+        </tr>
+    {% endfor %}
+    </table>
+</div>
 
 {% endblock %}
