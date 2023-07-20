@@ -30,4 +30,4 @@ def send_score(ref_code, nid, score, date, passed=0, url=None):
     sess.mount(url, adp)
     response=sess.post(url, json=js)
 
-    return response.json()
+    return response

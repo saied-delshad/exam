@@ -35,7 +35,7 @@ class CourseExamSessionAdmin(admin.ModelAdmin):
     list_display=["session_name", 'course_exam', "exam_start", "show_participantes", 'seats_occupied', 'start_session',
                   'register_status']
     list_filter = ['course_exam', CurrentExamsFilter]
-    search_fields = ['session_name', 'exam_start', "show_participantes", 'seats_occupied']
+    search_fields = ['session_name', 'exam_start', 'participants__username']
 
     def changelist_view(self, request, extra_context=None):
         if not (request.user.is_superuser or request.user.username=='exam_admin'):
@@ -85,6 +85,8 @@ class FreeExamSessionAdmin(admin.ModelAdmin):
 @admin.register(ExamResults)
 class ResultsExamAdmin(admin.ModelAdmin):
     list_display = ['student', 'created_at', 'is_finished', 'score', 'show_transcript', 'send_score', 'course']
+    search_fields = ['student__username', 'student__last_name', 'session_ref_number']
+
 
     def show_transcript(self, obj):
         return format_html('<a  href="/exam-sessions/transcript/{0}" target="_blank">show transcript</a>&nbsp;', obj.id )

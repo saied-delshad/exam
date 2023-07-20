@@ -64,11 +64,15 @@ def sending_score(request, pk):
                     str(result.score), 
                     date, 
                     passed = str(int(result.is_passed)), url=URL)
-            print(response)
-            if response['result']:
-                messages.add_message(request, messages.INFO, response['message'])
-            else:
-                messages.add_message(request, messages.WARNING, response['message'])
+            try:
+                response = response.json()
+                result = response['result']
+                if result:
+                    messages.add_message(request, messages.INFO, response['message'])
+                else:
+                    messages.add_message(request, messages.WARNING, response['message'])
+            except:
+                messages.add_message(request, messages.WARNING, 'Something went wrong status code:' + str(response.status_code))
             return redirect('/admin/exam_sessions/examresults/')
 
 
