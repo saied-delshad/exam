@@ -1,6 +1,7 @@
 from typing import Any, List, Tuple
 from django.contrib import admin
 from exam_sessions.models import CourseExamSession, SubjectExamSession, FreeExamSession, ExamResults
+from import_export.admin import ImportExportModelAdmin
 from django.utils.html import format_html
 from datetime import datetime
 
@@ -83,7 +84,7 @@ class FreeExamSessionAdmin(admin.ModelAdmin):
     exclude =  ['subject_sessions', 'course_sessions']
 
 @admin.register(ExamResults)
-class ResultsExamAdmin(admin.ModelAdmin):
+class ResultsExamAdmin(ImportExportModelAdmin):
     list_display = ['student', 'created_at', 'is_finished', 'score', 'show_transcript', 'send_score', 'course']
     search_fields = ['student__username', 'student__last_name', 'session_ref_number']
 

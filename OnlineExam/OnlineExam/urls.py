@@ -27,16 +27,16 @@ from core.views import IndexTemplateView
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    path('accounts/register/', RegistrationView.as_view(
-        form_class = CustomUserForm,
-        success_url = '/',
-    ), name="django_registration_register"),
+    # path('accounts/register/', RegistrationView.as_view(
+    #     form_class = CustomUserForm,
+    #     success_url = '/',
+    # ), name="django_registration_register"),
 
     path('accounts/', include('django.contrib.auth.urls')),
 
-    path('accounts/', include('django_registration.backends.one_step.urls')),
+    # path('accounts/', include('django_registration.backends.one_step.urls')),
 
-    path('api/rest-auth/', include('rest_auth.urls')),
+    # path('api/rest-auth/', include('rest_auth.urls')),
 
     # path('api/', include('users.api.urls')),
 
@@ -47,8 +47,8 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
 
 
-    path('api/rest-auth/registration/', 
-        include('rest_auth.registration.urls')),
+    # path('api/rest-auth/registration/', 
+    #     include('rest_auth.registration.urls')),
 
     path('exam-sessions/', include('exam_sessions.urls')),
     
