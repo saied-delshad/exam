@@ -28,6 +28,9 @@ def send_score(ref_code, nid, score, date, passed=0, url=None):
     sess = requests.session()
     adp = TlsAdapter(ssl.OP_NO_TLSv1_1 | ssl.OP_NO_TLSv1_2)
     sess.mount(url, adp)
-    response=sess.post(url, json=js)
+    Headers={'User-Agent':'Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148'}
+
+
+    response=sess.post(url, json=js, headers=Headers)
 
     return response

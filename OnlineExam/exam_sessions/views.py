@@ -7,6 +7,7 @@ from exam_sessions.send_scores import send_score
 from django.shortcuts import redirect
 from django.contrib import messages
 from exam_sessions.html_to_pdf import render_to_pdf
+from django.contrib.admin.views.decorators import staff_member_required
 
 
 
@@ -77,10 +78,7 @@ def sending_score(request, pk):
 
 
 
-
-
-
-
+@staff_member_required
 def list_participants(request, pk):
     exam_session = CourseExamSession.objects.get(id=pk)
     students = exam_session.participants.all()
@@ -92,7 +90,7 @@ def list_participants(request, pk):
         )
 
 
-
+@staff_member_required
 def start_session(request, pk):
     exam_session = CourseExamSession.objects.get(id=pk)
     if exam_session.started:
@@ -103,6 +101,7 @@ def start_session(request, pk):
         exam_session.save()
     return redirect('/admin/exam_sessions/courseexamsession/')
 
+@staff_member_required
 def register_status(request, pk):
     exam_session = CourseExamSession.objects.get(id=pk)
     if exam_session.is_active:
