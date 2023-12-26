@@ -30,17 +30,18 @@ class QuestionViewset(viewsets.ModelViewSet):
                     return super(QuestionViewset, self).get_queryset()
             except:
                 pass
+            
+            self.queryset = self.queryset.none()
             if ref.startswith('sub'):
-                subject_exam = SubjectExamSession.objects.get(session_ref_number=ref)
-                self.queryset = subject_exam.questions.all()
+                subject_exam = SubjectExamSession.objects.get(session_ref_number=ref, started=True)
+                if self.request.user in subject_exam.participants.all():
+                    self.queryset = subject_exam.questions.all()
             elif ref.startswith('course'):
-                course_exam = CourseExamSession.objects.get(session_ref_number=ref)
-                self.queryset = course_exam.questions.all()
-            else:
-                self.queryset = self.queryset.none()
+                course_exam = CourseExamSession.objects.get(session_ref_number=ref, started=True)
+                if self.request.user in course_exam.participants.all():
+                    self.queryset = course_exam.questions.all()
         except:
             if not self.request.user.is_superuser:
                 self.queryset = self.queryset.none()
-                
-           
+                 
         return super(QuestionViewset, self).get_queryset()
