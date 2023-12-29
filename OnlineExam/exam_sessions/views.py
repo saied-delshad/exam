@@ -75,6 +75,46 @@ def sending_score(request, pk):
             except:
                 messages.add_message(request, messages.WARNING, 'Something went wrong status code:' + str(response.status_code))
             return redirect('/admin/exam_sessions/examresults/')
+        
+
+@staff_member_required
+def send_abscents(request, pk):
+    es_obj = CourseExamSession.objects.get(id=pk)
+    session_ref = es_obj.session_ref_number
+    results = ExamResults.objects.filter(session_ref_number = session_ref)
+    abscents = es_obj.participants.exclude(id__in = results.values_list('student', flat=True))
+    d_date = str(es_obj.exam_start.date())
+    t_date = str(es_obj.exam_start.time())
+    date = d_date + ' ' + t_date
+    try:
+        course_name = es_obj.get_course()
+        if course_name == 'IR(A)' or course_name=='IR(H)':
+            URL = 'https://bpms.cao.ir/NetForm/Service/irexamresult/request'
+        else:
+            URL = 'https://bpms.cao.ir/NetForm/Service/examresult/request'
+
+    except:
+        URL = 'https://bpms.cao.ir/NetForm/Service/examresult/request'
+    
+    if abscents.count() > 0:
+        for student in abscents:
+            response = send_score(session_ref, 
+                        student.username, 
+                        '0', 
+                        date, 
+                        passed = '0',
+                        status = '1',
+                        url=URL)
+        try:
+            response = response.json()
+            result = response['result']
+            if result:
+                messages.add_message(request, messages.INFO, response['message'])
+            else:
+                messages.add_message(request, messages.WARNING, response['message'])
+        except:
+            messages.add_message(request, messages.WARNING, 'Something went wrong status code:' + str(response.status_code))
+    return redirect('/admin/exam_sessions/courseexamsession/')
 
 
 

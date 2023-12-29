@@ -16,14 +16,15 @@ class TlsAdapter(HTTPAdapter):
     self.poolmanager = PoolManager(*pool_args, ssl_context=ctx, **pool_kwargs)
 
 
-def send_score(ref_code, nid, score, date, passed=0, url=None):
+def send_score(ref_code, nid, score, date, passed=0, status=0, url=None):
 
     js = {
             "course": ref_code,
             "nid": nid,
             "score": score,
             "date": date,
-            "passed": passed
+            "passed": passed,
+            "status": status
           }
     sess = requests.session()
     adp = TlsAdapter(ssl.OP_NO_TLSv1_1 | ssl.OP_NO_TLSv1_2)

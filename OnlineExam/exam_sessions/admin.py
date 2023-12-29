@@ -1,5 +1,6 @@
 from typing import Any, List, Tuple
 from django.contrib import admin
+from users.models import CustomUser
 from exam_sessions.models import CourseExamSession, SubjectExamSession, FreeExamSession, ExamResults
 from import_export.admin import ImportExportModelAdmin
 from django.utils.html import format_html
@@ -34,7 +35,7 @@ class CourseExamSessionAdmin(admin.ModelAdmin):
     exclude = ['questions']
     filter_horizontal = ('participants',)
     list_display=["session_name", 'course_exam', "exam_start", "show_participantes", 'seats_occupied', 'start_session',
-                  'register_status']
+                  'register_status', 'send_abscents']
     list_filter = ['course_exam', CurrentExamsFilter]
     search_fields = ['session_name', 'exam_start', 'participants__username']
 
@@ -67,6 +68,11 @@ class CourseExamSessionAdmin(admin.ModelAdmin):
         else:
             return format_html('<a  href="/exam-sessions/register-status/{0}" style="color:green;"><img src="{1}" alt="open" style="height:50px;"/></a>&nbsp;', obj.id, '/media/imgs/closed.jpg' )
     register_status.short_description = 'Register Open/Close'
+    register_status.allow_tags = True
+
+    def send_abscents(self, obj):
+        return format_html('<a  href="/exam-sessions/abscents-send/{0}">Send Abscents</a>&nbsp;', obj.id )
+    register_status.short_description = 'Send Abscents'
     register_status.allow_tags = True
 
 

@@ -28,6 +28,6 @@ class CustomUser(AbstractUser):
         except cls.DoesNotExist:
             user = cls.objects.create_user(username=username, first_name= kwargs.get('first_name'),
                                last_name = kwargs.get('last_name'), email= kwargs.get('email'),
-                               cell_phone= kwargs.get('cell_phone'), 
+                               cell_phone= kwargs.get('cell_phone'), ATO = kwargs.get('ato'),
                                password=username)
             return user

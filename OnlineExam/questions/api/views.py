@@ -4,7 +4,7 @@ from questions.api.serializers import QuestionSerializer
 from questions.models import QuestionModel
 from exam_sessions.models import SubjectExamSession, CourseExamSession, ExamResults
 from questions.api.permissions import IsSubscribedInSession
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import MethodNotAllowed
 
 
 
@@ -13,6 +13,7 @@ class QuestionViewset(viewsets.ModelViewSet):
     lookup_field = "question_ref_code"
     serializer_class = QuestionSerializer
     permission_classes = [IsAuthenticated]
+    # http_method_names = ['get','head']
 
     # def perform_create(self, serializer):
     #     serializer.save(created_by=self.request.user)
@@ -31,7 +32,8 @@ class QuestionViewset(viewsets.ModelViewSet):
             except:
                 pass
             
-            self.queryset = self.queryset.none()
+            if not self.request.user.is_superuser:
+                self.queryset = self.queryset.none()
             if ref.startswith('sub'):
                 subject_exam = SubjectExamSession.objects.get(session_ref_number=ref, started=True)
                 if self.request.user in subject_exam.participants.all():
@@ -45,3 +47,12 @@ class QuestionViewset(viewsets.ModelViewSet):
                 self.queryset = self.queryset.none()
                  
         return super(QuestionViewset, self).get_queryset()
+    
+
+    def post(self, request):
+        if not self.request.user.is_superuser:
+            raise MethodNotAllowed(method='POST')
+        else:
+            return super(QuestionViewset, self).post()        
+    
+    
