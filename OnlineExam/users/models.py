@@ -14,8 +14,6 @@ def user_directory_path(instance, filename):
 
 
 class CustomUser(AbstractUser):
-
-    ATO = models.CharField("Training Organization", max_length=100, blank=True, null=True)
     photo = models.ImageField(upload_to = user_directory_path, validators=[file_size], blank=True,
                                         null=True)
     cell_phone = models.CharField('Cell Phone Numeber', max_length=12, blank=True, null=True)
@@ -28,6 +26,6 @@ class CustomUser(AbstractUser):
         except cls.DoesNotExist:
             user = cls.objects.create_user(username=username, first_name= kwargs.get('first_name'),
                                last_name = kwargs.get('last_name'), email= kwargs.get('email'),
-                               cell_phone= kwargs.get('cell_phone'), ATO = kwargs.get('ato'),
+                               cell_phone= kwargs.get('cell_phone'),
                                password=username)
             return user
