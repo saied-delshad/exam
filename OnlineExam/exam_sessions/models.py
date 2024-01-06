@@ -51,8 +51,9 @@ class AbstractExamSession(models.Model):
 class CourseExamSession(AbstractExamSession):
     course_exam = models.ForeignKey(
         CourseExamModel, on_delete=models.CASCADE, related_name="sessions_course_exams")
-    participants = models.ManyToManyField(CustomUser, verbose_name="Exam participant",
-                                          related_name="course_exams", blank=True)
+    
+    participants = models.ManyToManyField(CustomUser, verbose_name="Exam participants", through='SessionParticipants',
+                                          related_name="course_exam", blank=True)
     
 
     def course_name(self):
@@ -83,6 +84,14 @@ class CourseExamSession(AbstractExamSession):
 
     def __str__(self):
         return self.course_exam.course.course_name + '-' + self.session_ref_number
+    
+
+class SessionParticipants(models.Model):
+    applicant = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="Exam participant",
+                                          related_name="participation", blank=True, null=True)
+    session = models.ForeignKey(CourseExamSession, on_delete=models.CASCADE, verbose_name="course exam",
+                                          related_name="sessions", blank=True, null=True)
+    training_org = models.CharField(max_length = 100, verbose_name="Training Organization", blank=True, null=True)
 
 
 class SubjectExamSession(AbstractExamSession):

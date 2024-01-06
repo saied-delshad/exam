@@ -1,7 +1,7 @@
 from typing import Any, List, Tuple
 from django.contrib import admin
 from users.models import CustomUser
-from exam_sessions.models import CourseExamSession, SubjectExamSession, FreeExamSession, ExamResults
+from exam_sessions.models import CourseExamSession, SubjectExamSession, FreeExamSession, ExamResults, SessionParticipants
 from import_export.admin import ImportExportModelAdmin
 from django.utils.html import format_html
 from datetime import datetime
@@ -30,14 +30,19 @@ class CurrentExamsFilter(admin.SimpleListFilter):
                 exam_start__lt=datetime.now(),
                 )
 
+class ParticipantsForm(admin.TabularInline):
+    model = SessionParticipants
+    extra = 1
+
 @admin.register(CourseExamSession)
 class CourseExamSessionAdmin(admin.ModelAdmin):
     exclude = ['questions']
-    filter_horizontal = ('participants',)
+    # filter_horizontal = ('participants',)
     list_display=["session_name", 'course_exam', "exam_start", "show_participantes", 'seats_occupied', 'start_session',
                   'register_status', 'send_abscents']
     list_filter = ['course_exam', CurrentExamsFilter]
     search_fields = ['session_name', 'exam_start', 'participants__username']
+    inlines = (ParticipantsForm,)
 
     def changelist_view(self, request, extra_context=None):
         if not (request.user.is_superuser or request.user.username=='exam_admin'):
