@@ -9,11 +9,12 @@
       font-family: arial, sans-serif;
       border-collapse: collapse;
       width: 100%;
+      text-align: center;
     }
     
     td, th {
       border: 1px solid #dddddd;
-      text-align: left;
+      text-align: center;
       padding: 8px;
     }
     
@@ -23,31 +24,69 @@
 </style>
 
 <h1> {{ session_name }} </h1>
+<h2> {{ session_time }} </h2>
 <table>
     <tr>
         <th> Photo </th>
         <th> Name </th>
         <th> National Code </th>
         <th> Phone </th>
+        <th> ATO </th>
     </tr>
     
 
     {% for student in students %}
     <tr>
         <td>
-            <img src='{{ MEDIA_URL }}{{ student.photo }}' />
+            <img src='{{ MEDIA_URL }}{{ student.applicant.photo }}' />
         </td>
         <td>
-            {{ student.get_full_name }}
+            {{ student.applicant.get_full_name }}
         </td>
         <td>
-            {{ student.username }}
+            {{ student.applicant.username }}
         </td>
         <td>
-            {{ student.cell_phone }}
+            {{ student.applicant.cell_phone }}
+        </td>
+        <td>
+            {{ student.training_org }}
         </td>
     </tr>
     {%  endfor %}
 </table>
+
+{% for student in students %}
+    <div style="page-break-before:always;">
+        <h2> {{ session_time }} </h2>
+        <table>
+            <tr>
+                <th> Photo </th>
+                <th> Name </th>
+                <th> Username </th>
+                <th> Password </th>
+                <th> Exam </th>
+            </tr>
+            <tr>
+                <td>
+                    <img src='{{ MEDIA_URL }}{{ student.applicant.photo }}' />
+                </td>
+                <td>
+                    {{ student.applicant.get_full_name }}
+                </td>
+                <td>
+                    {{ student.applicant.username }}
+                </td>
+                <td>
+                    {{ student.passw }}
+                </td>
+                <td>
+                    {{ session_name }}
+                </td>
+            </tr>
+        </table>
+
+    </div>
+{% endfor %}
 
 {% endblock %}

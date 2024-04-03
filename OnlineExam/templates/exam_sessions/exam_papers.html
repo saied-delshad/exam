@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static %}
+{% get_media_prefix as MEDIA_URL %}
+
+{% block content %}
+
+<style>
+    table {
+      font-family: arial, sans-serif;
+      border-collapse: collapse;
+      width: 100%;
+    }
+    
+    td, th {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #dddddd;
+    }
+</style>
+
+<h1> {{ session_name }} </h1>
+<table>
+    <tr>
+        <th> Photo </th>
+        <th> Name </th>
+        <th> Username </th>
+        <th> Password </th>
+    </tr>
+    
+    <tr>
+        <td>
+            <img src='{{ MEDIA_URL }}{{ student.photo }}' />
+        </td>
+        <td>
+            {{ student.get_full_name }}
+        </td>
+        <td>
+            {{ student.username }}
+        </td>
+        <td>
+            {{ student.cell_phone }}
+        </td>
+    </tr>
+    {%  endfor %}
+</table>
+
+{% endblock %}

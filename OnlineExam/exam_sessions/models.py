@@ -53,7 +53,7 @@ class CourseExamSession(AbstractExamSession):
         CourseExamModel, on_delete=models.CASCADE, related_name="sessions_course_exams")
     
     participants = models.ManyToManyField(CustomUser, verbose_name="Exam participants", through='SessionParticipants',
-                                          related_name="course_exam", blank=True)
+                                          related_name="course_exams", blank=True)
     
 
     def course_name(self):
@@ -92,6 +92,11 @@ class SessionParticipants(models.Model):
     session = models.ForeignKey(CourseExamSession, on_delete=models.CASCADE, verbose_name="course exam",
                                           related_name="sessions", blank=True, null=True)
     training_org = models.CharField(max_length = 100, verbose_name="Training Organization", blank=True, null=True)
+
+    registration_date_time = models.DateTimeField(verbose_name="Registered at",auto_now_add=True, null=True)
+
+    class Meta:
+        unique_together = ('applicant', 'session',)
 
 
 class SubjectExamSession(AbstractExamSession):
@@ -165,6 +170,7 @@ class ExamResults(models.Model):
     exam_remaining = models.IntegerField("Exam remaining time in seconds", blank=True, null=True)
     is_passed = models.BooleanField("Passed in exam", default=False)
     is_finished = models.BooleanField("Exam is finished", default=False)
+    is_abscent = models.BooleanField("Abscent in exam", default=False)
     show_score = models.BooleanField("Show score at the end of the exam?", default=False)
     fsession_ref_number = models.CharField("Free Session reference code", max_length=20, null=True, blank=True)
 

@@ -92,6 +92,8 @@ def has_exam_finished(sender, instance, *args, **kwargs):
         questions = session.questions.all()
         answers = instance.answers
         sorting = instance.snapshot
+        if not sorting:
+            sorting = re_sort(questions)
         if answers == None:
             answers = {}
         correctly_answered_questions = []
@@ -166,17 +168,30 @@ def finish_send_score(sender, instance, created, **kwargs):
         t_date = str(instance.get_session().exam_start.time())
         date = d_date + ' ' + t_date
         passed = str(int(instance.is_passed))
+        if instance.is_abscent:
+            status = 1
+        else:
+            status = 0
         try:
             course_name = instance.get_session().get_course()
             if course_name == 'IR(A)' or course_name == 'IR(H)':
                 URL = 'https://bpms.cao.ir/NetForm/Service/irexamresult/request'
             else:
                 URL = 'https://bpms.cao.ir/NetForm/Service/examresult/request'
-            send_score(ref_code, nid, score, date, passed=passed, url=URL)
+            send_score(ref_code, nid, score, date, passed=passed, status=status, url=URL)
             
         except:
             pass
 
+
+
+def re_sort(quests):
+    sorted = {}
+    i=1
+    for q in quests:
+        sorted[i] = q.question_ref_code
+        i+=1
+    return sorted
         
         
             

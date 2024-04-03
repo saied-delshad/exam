@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
 
     'oauth2_provider',
-
+    'captcha',
     'admin_reorder',
 
     'import_export',
@@ -130,7 +130,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'OnlineExam.wsgi.application'
 
-
+CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 

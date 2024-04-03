@@ -19,13 +19,18 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 from django_registration.backends.one_step.views import RegistrationView
-from users.forms import CustomUserForm
+from django.contrib.auth import views as auth_views
+from OnlineExam.forms import CustomAdminLogin
+from users.forms import CustomUserForm, CustomLoginForm
 from core.views import IndexTemplateView
 
 
+admin.site.login_form = CustomAdminLogin
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('exam-management/', admin.site.urls),
+    path("accounts/login/", auth_views.LoginView.as_view(
+        authentication_form = CustomLoginForm,)),
 
     # path('accounts/register/', RegistrationView.as_view(
     #     form_class = CustomUserForm,
@@ -33,7 +38,7 @@ urlpatterns = [
     # ), name="django_registration_register"),
 
     path('accounts/', include('django.contrib.auth.urls')),
-
+    path('captcha/', include('captcha.urls')),
     # path('accounts/', include('django_registration.backends.one_step.urls')),
 
     # path('api/rest-auth/', include('rest_auth.urls')),
@@ -61,5 +66,6 @@ urlpatterns = [
 # if settings.DEBUG:
 urlpatterns = static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + urlpatterns
 urlpatterns = static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + urlpatterns
+
 
 admin.site.site_header = 'Online Examination System'

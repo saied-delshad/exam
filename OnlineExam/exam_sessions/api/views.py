@@ -1,9 +1,7 @@
-from rest_framework import viewsets
-from rest_framework import generics
-from rest_framework import views
+from rest_framework import viewsets, generics, views, status
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
-from rest_framework import status
 from django.db.models import Q
 from django.views.decorators.csrf import csrf_exempt
 import itertools
@@ -12,7 +10,8 @@ from users.models import CustomUser
 from exam_sessions.api.permissions import IsSubscribedInSession, ExamResultOwner, IsNetRise
 from exam_sessions.api.serializers import (SubjectSessionSerializer, CourseSessionSerializer, SessionsSerializer,
                                            ExamResultSerializer, ExamResultWriteSerializer, FreeSessionSerializer)
-from exam_sessions.models import SubjectExamSession, CourseExamSession, FreeExamSession, ExamResults
+from exam_sessions.models import (SubjectExamSession, CourseExamSession, FreeExamSession,
+                                   ExamResults, SessionParticipants as SP)
 from questions.models import CourseModel
 from core.sms_send import send_sms
 from core.image_upload import photo
@@ -121,6 +120,7 @@ class SessionRegister(views.APIView):
         applicant_nid = request.data.get('nid')
         session_ref_number = request.data.get('session_ref_code')
         app_data = request.data.get('applicant_data')
+        traning_in = request.data.get('ato')
         photo_data = app_data.pop('photo', None)
 
         applicant = CustomUser.get_or_create(username=applicant_nid, **app_data)
@@ -134,7 +134,9 @@ class SessionRegister(views.APIView):
                 result = {'message':'Session Not Found!'}
                 return Response(result, status=status.HTTP_400_BAD_REQUEST)
             if not applicant in c_session.participants.all() and c_session.remaining_seats() > 0:
-                c_session.participants.add(applicant)
+                s_add = SP(applicant=applicant, session=c_session, training_org=traning_in)
+                s_add.save()
+                # c_session.participants.add(applicant)
                 send_sms(applicant.cell_phone, applicant.get_full_name(), 
                          c_session.course_name(), c_session.exam_start)
                 return Response(request.data, status=status.HTTP_201_CREATED)
@@ -155,7 +157,9 @@ class SessionRegister(views.APIView):
                                                                            exam_start=f_exam.exam_start,
                                                                            show_score=f_exam.show_score, 
                                                                            session_total_seats =f_exam.session_total_seats)
-                course_exam_session.participants.add(applicant)
+                #course_exam_session.participants.add(applicant)
+                s_add = SP(applicant=applicant, session=course_exam_session, training_org=traning_in)
+                s_add.save()
                 send_sms(applicant.cell_phone, applicant.get_full_name(), 
                          course_exam_session.course_name(), course_exam_session.exam_start)
                 f_exam.increment_occupied()
@@ -166,7 +170,29 @@ class SessionRegister(views.APIView):
             return Response(request.data, status=status.HTTP_201_CREATED)               
 
 
+@api_view(['POST'])
+def cancel_registration(request):
+    if request.user.username == 'netrise' and request.method == "POST":
+        applicant_nid = request.data.get('nid')
+        session_ref_number = request.data.get('session_ref_code')
 
+        if session_ref_number != '':
+            c_session = CourseExamSession.objects.get(session_ref_number=session_ref_number)
+            applicant = CustomUser.objects.get(username=applicant_nid)
+
+            s_participant = SP.objects.get(session=c_session, applicant=applicant)
+            s_participant.delete()
+            custom_message = """Dear Applicant {0}, You have successfully registered in exam: {1}, Exa Civil Aviation Authority of the Islamic Republic of Iran""".format(applicant.get_full_name(), c_session.course_name())
+            send_sms(applicant.cell_phone, applicant.get_full_name(), 
+                         c_session.course_name(), c_session.exam_start, custom_message=custom_message)
+            result = {'message': 'Registration was successfully canceled'}
+            return Response(result, status = status.HTTP_200_OK)
+        else:
+            result = {'message': 'Could not find the applicant'}
+            return Response(result, status = status.HTTP_204_NO_CONTENT)
+    else:
+        result = {'message': 'You are not authorize'}
+        return Response(result, status = status.HTTP_401_UNAUTHORIZED)
 
 
 

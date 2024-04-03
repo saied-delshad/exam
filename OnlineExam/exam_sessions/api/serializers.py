@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from exam_sessions.models import SubjectExamSession, CourseExamSession, FreeExamSession, ExamResults
+from exam_sessions.models import (SubjectExamSession, CourseExamSession, FreeExamSession, 
+                                        ExamResults, SessionParticipants)
 
 class SubjectSessionSerializer(serializers.ModelSerializer):
 
@@ -45,3 +46,8 @@ class SessionsSerializer(serializers.Serializer):
             return 'free'
         elif obj.session_ref_number.startswith('course'):
             return obj.get_course()
+        
+
+class SessionParticipantsSerializer(serializers.ModelSerializer):
+    class Mera():
+        model = SessionParticipants

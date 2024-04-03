@@ -11,8 +11,11 @@ class IndexTemplateView(LoginRequiredMixin, TemplateView):
         if active_exam and request.get_full_path() == "/":
             if active_exam.session_ref_number:
                 return redirect('/'+active_exam.session_ref_number)
-        else:
-            return super(IndexTemplateView, self).get(request, *args, **kwargs)
+        elif active_exam and not request.get_full_path().endswith(active_exam.session_ref_number):
+            return redirect('/'+active_exam.session_ref_number)
+        elif not active_exam and request.get_full_path() != "/":
+            return redirect('/')
+        return super(IndexTemplateView, self).get(request, *args, **kwargs)
 
 
     def get_template_names(self):

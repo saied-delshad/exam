@@ -1,5 +1,6 @@
 from typing import Any, List, Tuple
 from django.contrib import admin
+from django.http.request import HttpRequest
 from users.models import CustomUser
 from exam_sessions.models import CourseExamSession, SubjectExamSession, FreeExamSession, ExamResults, SessionParticipants
 from import_export.admin import ImportExportModelAdmin
@@ -32,7 +33,12 @@ class CurrentExamsFilter(admin.SimpleListFilter):
 
 class ParticipantsForm(admin.TabularInline):
     model = SessionParticipants
-    extra = 1
+    readonly_fields = ['registration_date_time']
+    extra = 0
+
+    def has_change_permission(self, request, obj=None):
+        return False
+    
 
 @admin.register(CourseExamSession)
 class CourseExamSessionAdmin(admin.ModelAdmin):
@@ -44,6 +50,8 @@ class CourseExamSessionAdmin(admin.ModelAdmin):
     search_fields = ['session_name', 'exam_start', 'participants__username']
     inlines = (ParticipantsForm,)
 
+
+
     def changelist_view(self, request, extra_context=None):
         if not (request.user.is_superuser or request.user.username=='exam_admin'):
             self.list_display = ['session_name', 'course_exam', "exam_start", "show_participantes"]
@@ -51,7 +59,10 @@ class CourseExamSessionAdmin(admin.ModelAdmin):
 
 
     def show_participantes(self, obj):
-        return format_html('<a  href="/exam-sessions/participants/{0}" target="_blank">list participants</a>&nbsp;', obj.id )
+        if obj.started:
+            return format_html('<a  href="/exam-sessions/participants/{0}" target="_blank">list participants</a>&nbsp;', obj.id )
+        else:
+            return None
     show_participantes.short_description = 'List Participants'
     show_participantes.allow_tags = True
 
@@ -96,7 +107,7 @@ class FreeExamSessionAdmin(admin.ModelAdmin):
 
 @admin.register(ExamResults)
 class ResultsExamAdmin(ImportExportModelAdmin):
-    list_display = ['student', 'created_at', 'is_finished', 'score', 'show_transcript', 'send_score', 'course']
+    list_display = ['student', 'created_at', 'is_finished', 'score', 'is_abscent', 'show_transcript', 'send_score', 'course']
     search_fields = ['student__username', 'student__last_name', 'session_ref_number']
 
 

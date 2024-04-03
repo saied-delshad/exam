@@ -5,14 +5,17 @@ import json
 URL = 'https://new.payamsms.com/services/rest/index.php'
 
 
-def send_sms(applicant_cell, applicant_fullname, exam_name, exam_date_time):
+def send_sms(applicant_cell, applicant_fullname, exam_name, exam_date_time, custom_message = None):
 
     exam_date = exam_date_time.date().strftime("%d/%m/%Y")
 
     exam_time = exam_date_time.astimezone(timezone('Asia/Tehran')).time().strftime('%H:%M')
 
     
-    raw_message= """Dear Applicant {0}, You have successfully registered in exam: {1}, Exam Date: {2}, Exam Time:{3} Civil Aviation Authority of Islamic Republic of Iran""".format(applicant_fullname, exam_name, exam_date, exam_time)
+    if custom_message == None:
+        raw_message= """Dear Applicant {0}, You have successfully registered in exam: {1}, Exam Date: {2}, Exam Time:{3} Civil Aviation Authority of the Islamic Republic of Iran""".format(applicant_fullname, exam_name, exam_date, exam_time)
+    else:
+        raw_message = custom_message
 
     
     js = {
