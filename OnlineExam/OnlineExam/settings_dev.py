@@ -15,9 +15,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'exam_db',
         # 'NAME': 'back_up',
-        'USER':'examiner',
-        'PASSWORD':'Aliz12363',
-        'HOST':'localhost',
+        'USER': 'examiner',
+        'PASSWORD': 'Aliz12363',
+        'HOST': 'localhost',
         'PORT': 5432,
     }
 }
