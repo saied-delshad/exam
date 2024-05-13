@@ -5,3 +5,4 @@ OnlineExam\settings.py
 core\views.py
 *\migrations\*
 *.pyc
+.idea/
