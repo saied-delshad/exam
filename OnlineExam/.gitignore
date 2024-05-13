@@ -1,8 +1,0 @@
-db.sqlite3
-errors.log
-.gitignore
-OnlineExam\settings.py
-core\views.py
-*\migrations\*
-*.pyc
-.idea/
