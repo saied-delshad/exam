@@ -21,7 +21,7 @@ class SubjectSessionViewset(viewsets.ModelViewSet):
     queryset = SubjectExamSession.objects.filter(started=True)
     lookup_field = "session_ref_number"
     serializer_class = SubjectSessionSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsSubscribedInSession]
 
     def get_queryset(self):
         taken_exams = ExamResults.objects.filter(student = self.request.user)
@@ -40,7 +40,7 @@ class CourseSessionViewset(viewsets.ModelViewSet):
     queryset = CourseExamSession.objects.filter(started=True)
     lookup_field = "session_ref_number"
     serializer_class = CourseSessionSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsSubscribedInSession]
 
     def get_queryset(self):
         taken_exams = ExamResults.objects.filter(student = self.request.user)

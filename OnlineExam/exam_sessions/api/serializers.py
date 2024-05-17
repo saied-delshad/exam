@@ -6,7 +6,7 @@ class SubjectSessionSerializer(serializers.ModelSerializer):
 
     class Meta():
         model = SubjectExamSession
-        exclude = ["participants", "questions"]
+        exclude = ['session_ref_number',"participants", "questions", 'exam_start', 'session_total_seats']
 
 
 class CourseSessionSerializer(serializers.ModelSerializer):
