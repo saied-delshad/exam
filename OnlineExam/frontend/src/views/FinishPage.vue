@@ -30,8 +30,15 @@
 import NavbarComponent from "../components/UI/Navbar.vue";
 import BaseCard from "../components/UI/BaseCard.vue";
 import { apiService, patchAxios } from "../common/api.service";
+import { useCookies } from "vue3-cookies";
 
 export default {
+
+    setup() {
+        const { cookies } = useCookies();
+        return { cookies };
+    },
+
     components: { BaseCard, NavbarComponent },
     name: "FinishePage",
 
@@ -80,6 +87,8 @@ export default {
             apiService(endpoint).then( data => {
                 if (data['show_score']) {
                     this.score = data['score'];
+                    this.cookies.remove('Answers_'+this.SessionId);
+
                 }
             }).catch(e => {
             console.log(e);})

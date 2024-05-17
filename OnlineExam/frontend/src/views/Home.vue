@@ -13,10 +13,10 @@
                     :key="ind"
                     class="container exams"
                 >
-                    Exam name (click to start)
                     <button
                         @click="startSession(session)"
                         class="btn btn-outline-success"
+                        style="margin-left:50px;"
                     >
                         {{ session.session_name }}
                     </button>
@@ -26,13 +26,13 @@
                     v-for="(session, ind) in ActiveCouSessions"
                     :key="ind"
                     class="container exams"
-                ><span class="fa fa-flag"></span>
-                    Exam name (click to start)
+                >
                     <button
                         @click="startSession(session)"
                         class="btn btn-outline-success"
+                        style="margin-left:25%; font-size:30px;"
                     >
-                        {{ session.course_name }} Start Exam
+                        {{ session.course_name }} Start Exam <span class="fa fa-play"></span>
                     </button>
                     <p v-if="session.session_descriptions != null">Exam Description: {{ session.session_descriptions }}</p>
                 </base-card>
