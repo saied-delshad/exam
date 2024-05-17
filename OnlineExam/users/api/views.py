@@ -14,5 +14,6 @@ class UserDisplayAPIViewset(viewsets.ModelViewSet):
     def get_queryset(self):
 
         if self.request.user.is_authenticated:
-            session_queryset = CustomUser.objects.get(user=self.request.user)
+            session_queryset = CustomUser.objects.filter(username=self.request.user.username)
+        
         return session_queryset
