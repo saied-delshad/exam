@@ -47,7 +47,7 @@
             <template #default>
                 <p> Are you sure? </p>
                 <p> You will quit the exam and will not be able to continue </p>
-            </template>
+            </template> 
             <template #actions>
                 <div class="btn-group">
                     <button @click="BackToExam" class="btn btn-sm btn-success">Back to Exam </button>
@@ -55,6 +55,11 @@
                 </div>
             </template>
         </base-dialog>
+        <div class="connection-status">
+            <p>Connetion Status</p>
+            <p> {{ isconnected[1] }}<span class="dot" :style="isconnected[0]"></span></p>
+        </div>
+        
     </div>
 </template>
 
@@ -88,7 +93,9 @@ export default {
             NavigateQ: false,
             examDur: 0,
             remainingTime: null,
-            questionsQue: {}
+            questionsQue: {},
+            isconnected: ['background-color: lightgreen;','Connected'],
+            un_suc_attempts: 0,
         };
     },
     provide() {
@@ -125,6 +132,12 @@ export default {
             }
         },
 
+        answersInCookies(Answers) {
+            let data = {'answers':Answers, 'sesId':this.SessionId}
+            this.cookies.set('Answers_'+this.SessionId, JSON.stringify(data))
+
+        },
+
         updateAnswer(Qid, newAnswer) {
             const identQ = this.Questions.find(
                 (question) => question.id === Qid
@@ -135,11 +148,22 @@ export default {
                 
                 let data = {'answers':this.Answers, 'snapshot':this.questionsQue, 
                                 'exam_remaining':parseInt(this.remainingTime/1000)};
-                console.log(data);
+                this.answersInCookies(this.Answers);
                 let endpoint = "api/results/" + this.SessionId + '/';
                 patchAxios(endpoint, data).then( response => {
-                    console.log(response.data);}).catch(e => {
+                    if (response.data) {
+                        console.log(response.data)
+                    }
+                    this.un_suc_attempts = 0;
+                    this.isconnected = ['background-color: lightgreen;', 'Connected'];
+                    console.log(this.un_suc_attempts);
+                }).catch(e => {
                         console.log(e);
+                        this.un_suc_attempts = this.un_suc_attempts+1;
+                        if (this.un_suc_attempts > 3) {
+                            this.isconnected=['background-color: red;', 'Disconnected'];
+                        }
+                        console.log(this.un_suc_attempts);
                     });
             }
             this.NextQ();
@@ -351,4 +375,21 @@ export default {
 .t-container {
     margin-top:20%;
 }
+
+.dot {
+     height: 25px;
+     width: 25px;
+     border-radius: 50%;
+     display: inline-block;
+    margin-left: 40%;
+}
+
+.connection-status {
+    border: solid 1px;
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    padding:10px;
+}
+
 </style>

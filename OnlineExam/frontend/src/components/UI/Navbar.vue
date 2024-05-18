@@ -16,6 +16,9 @@
                         <span class="nav-text-small img-logo">{{ user["first_name"] }} {{ user['last_name'] }}</span>
                     </p>
                 </li>
+                <li>
+                    <img :src="user['photo']" style = "width:60px; height:60px;" />
+                </li>
                 <li v-if="page == 'Home' || page == 'Finish'" class="nav-item">
                     <a class="btn btn-warning"
                         href="/accounts/logout/"
@@ -53,9 +56,9 @@ export default {
 
     methods: {
         getUserData() {
-            let endpoint = "api/rest-auth/user/";
+            let endpoint = "api/users/";
             apiService(endpoint).then((data) => {
-                this.user = JSON.parse(JSON.stringify(data));
+                this.user = JSON.parse(JSON.stringify(data))[0];
             });
         },
     },

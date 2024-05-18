@@ -5,4 +5,4 @@ class UserDisplaySerializer(serializers.ModelSerializer):
 
     class Meta:
         model =  CustomUser
-        exclude = ['username']
+        fields = ['first_name', 'last_name', 'photo']
