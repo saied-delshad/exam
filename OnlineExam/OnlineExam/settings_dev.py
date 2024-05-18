@@ -5,19 +5,19 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*', 'meraj.exama.ir']
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'exam_db',
         # 'NAME': 'back_up',
-        'USER':'examiner',
-        'PASSWORD':'Aliz12363',
-        'HOST':'localhost',
+        'USER': 'examiner',
+        'PASSWORD': 'Aliz12363',
+        'HOST': 'localhost',
         'PORT': 5432,
     }
 }
@@ -30,7 +30,7 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     # os.path.join(BASE_DIR , 'static'),
-    os.path.join(BASE_DIR , 'frontend/dist')
+    os.path.join(BASE_DIR, 'frontend/dist')
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 

@@ -128,7 +128,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'OnlineExam.wsgi.application'
+# WSGI_APPLICATION = 'OnlineExam.wsgi.application'
 
 CAPTCHA_CHALLENGE_FUNCT = 'captcha.helpers.math_challenge'
 # Database

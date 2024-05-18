@@ -13,13 +13,12 @@ class CustomUserAdmin(UserAdmin):
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         (('Personal info'), {'fields': ('first_name', 'last_name', 'email', 'cell_phone',
-         'ATO', 'photo')}),
+          'photo')}),
         (('Permissions'), {
             'fields': ('is_active', 'is_staff', 'is_superuser','user_permissions'),
         }),
         (('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
-
 
 
 admin.site.register(CustomUser, CustomUserAdmin)
